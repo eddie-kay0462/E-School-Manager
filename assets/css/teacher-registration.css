@@ -1,0 +1,18 @@
+:root {
+    --primary-green: #2E7D32;
+    --light-green: #4CAF50;
+}
+
+.btn-primary {
+    background-color: var(--primary-green);
+    border-color: var(--primary-green);
+}
+
+.btn-primary:hover {
+    background-color: var(--light-green);
+    border-color: var(--light-green);
+}
+
+.text-primary {
+    color: var(--primary-green) !important;
+}
