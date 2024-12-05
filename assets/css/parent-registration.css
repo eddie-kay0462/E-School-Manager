@@ -1,6 +1,22 @@
-:root {
-    --primary-green: #2E7D32;
-    --light-green: #4CAF50;
+body {
+    background-color: #f8f9fa;
+}
+
+.navbar {
+    background-color: var(--primary-green);
+}
+
+.card {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+.text-danger {
+    font-size: 0.875em;
 }
 
 .btn-primary {
@@ -13,6 +29,7 @@
     border-color: var(--light-green);
 }
 
-.text-primary {
-    color: var(--primary-green) !important;
-}
+:root {
+    --primary-green: #2E7D32;
+    --light-green: #4CAF50;
+} 
