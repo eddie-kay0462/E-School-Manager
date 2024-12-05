@@ -1,18 +1,25 @@
+:root {
+    --primary-green: #2E7D32;
+    --light-green: #4CAF50;
+} 
 body {
     background-color: #f8f9fa;
+    color: #333;
 }
 
 .navbar {
     background-color: var(--primary-green);
+    color: #fff;
+    
+}
+
+h1 {
+    color: var(--primary-green);
 }
 
 .card {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.form-label {
-    font-weight: bold;
 }
 
 .text-danger {
@@ -29,7 +36,3 @@ body {
     border-color: var(--light-green);
 }
 
-:root {
-    --primary-green: #2E7D32;
-    --light-green: #4CAF50;
-} 
