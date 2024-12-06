@@ -16,6 +16,13 @@ document.querySelectorAll('input').forEach(input => {
     });
 });
 
+// Validate parent ID
+document.getElementById('parent_id').addEventListener('input', function() {
+    const parentIdError = document.getElementById('parentIdError');
+    const parentIdRegex = /^PRNT-\d{3}$/i; // Case insensitive match for PRNT-XXX where X is digit
+    parentIdError.style.display = parentIdRegex.test(this.value) ? 'none' : 'block';
+});
+
 // Validate parent name
 document.getElementById('parentName').addEventListener('input', function() {
     const nameError = document.getElementById('nameError');
@@ -85,12 +92,14 @@ document.getElementById('parentRegistration').addEventListener('submit', functio
 });
 
 function validateForm() {
+    const parentId = document.getElementById('parent_id').value.trim();
     const parentName = document.getElementById('parentName').value.trim();
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
     const wardId = document.getElementById('wardId').value.trim();
 
+    const parentIdRegex = /^PRNT-\d{3}$/i;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordRegex = {
         minLength: /.{8,}/,
@@ -101,6 +110,7 @@ function validateForm() {
     };
 
     return (
+        parentIdRegex.test(parentId) &&
         parentName !== '' &&
         emailRegex.test(email) &&
         Object.values(passwordRegex).every(regex => regex.test(password)) &&
