@@ -100,8 +100,6 @@ document.getElementById('password').addEventListener('input', function() {
     }
 });
 
-
-
 // Validate confirm password
 document.getElementById('confirmPassword').addEventListener('input', function() {
     const password = document.getElementById('password').value;
@@ -197,7 +195,7 @@ document.getElementById('teacherRegistration').addEventListener('submit', functi
             error.style.display = 'none';
         });
         
-        // Submit the form
+        // Submit the form normally
         this.submit();
     }
 });
