@@ -44,6 +44,31 @@
                         <h1 class="text-primary text-center mb-4">Teacher Registration</h1>
                         <form id="teacherRegistration" method="POST" action="../actions/register_teacher.php">
                             <div class="mb-3">
+                                <label class="form-label">Select Teacher ID</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="teacher_id" value="TEACH-001" id="teach001" required>
+                                    <label class="form-check-label" for="teach001">TEACH-001</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="teacher_id" value="TEACH-002" id="teach002">
+                                    <label class="form-check-label" for="teach002">TEACH-002</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="teacher_id" value="TEACH-003" id="teach003">
+                                    <label class="form-check-label" for="teach003">TEACH-003</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="teacher_id" value="TEACH-004" id="teach004">
+                                    <label class="form-check-label" for="teach004">TEACH-004</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="teacher_id" value="TEACH-005" id="teach005">
+                                    <label class="form-check-label" for="teach005">TEACH-005</label>
+                                </div>
+                                <span class="text-danger" id="teacherIdError" style="display: none;">Please select a Teacher ID</span>
+                            </div>
+
+                            <div class="mb-3">
                                 <label for="firstName" class="form-label">First Name</label>
                                 <input type="text" class="form-control" id="firstName" name="firstName" required>
                                 <span class="text-danger" id="firstNameError" style="display: none;">Please enter your first name</span>
@@ -85,31 +110,31 @@
                                 <div class="row g-3">
                                     <div class="col-6">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="courses[]" value="COURSE-MATH-01" id="mathCheck">
+                                            <input class="form-check-input" type="checkbox" name="courses[]" value="math" id="mathCheck">
                                             <label class="form-check-label" for="mathCheck">Mathematics</label>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="courses[]" value="COURSE-ENG-01" id="englishCheck">
+                                            <input class="form-check-input" type="checkbox" name="courses[]" value="english" id="englishCheck">
                                             <label class="form-check-label" for="englishCheck">English</label>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="courses[]" value="COURSE-SCI-01" id="scienceCheck">
+                                            <input class="form-check-input" type="checkbox" name="courses[]" value="science" id="scienceCheck">
                                             <label class="form-check-label" for="scienceCheck">Integrated Science</label>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="courses[]" value="COURSE-SOC-01" id="socialCheck">
+                                            <input class="form-check-input" type="checkbox" name="courses[]" value="social" id="socialCheck">
                                             <label class="form-check-label" for="socialCheck">Social Studies</label>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="courses[]" value="COURSE-FRE-01" id="frenchCheck">
+                                            <input class="form-check-input" type="checkbox" name="courses[]" value="french" id="frenchCheck">
                                             <label class="form-check-label" for="frenchCheck">French</label>
                                         </div>
                                     </div>
