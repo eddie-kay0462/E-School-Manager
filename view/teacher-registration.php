@@ -42,6 +42,23 @@
                 <div class="card shadow">
                     <div class="card-body p-4">
                         <h1 class="text-primary text-center mb-4">Teacher Registration</h1>
+                        <?php
+                        session_start();
+                        if (isset($_SESSION['error'])) {
+                            echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">';
+                            echo htmlspecialchars($_SESSION['error']);
+                            echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+                            echo '</div>';
+                            unset($_SESSION['error']);
+                        }
+                        if (isset($_SESSION['success'])) {
+                            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">';
+                            echo htmlspecialchars($_SESSION['success']);
+                            echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+                            echo '</div>';
+                            unset($_SESSION['success']);
+                        }
+                        ?>
                         <form id="teacherRegistration" method="POST" action="../actions/register_teacher.php">
                             <div class="mb-3">
                                 <label class="form-label">Select Teacher ID</label>
