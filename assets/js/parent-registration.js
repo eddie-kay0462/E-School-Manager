@@ -20,7 +20,9 @@ document.querySelectorAll('input').forEach(input => {
 document.getElementById('parent_id').addEventListener('input', function() {
     const parentIdError = document.getElementById('parentIdError');
     const parentIdRegex = /^PRNT-\d{3}$/i; // Case insensitive match for PRNT-XXX where X is digit
-    parentIdError.style.display = parentIdRegex.test(this.value) ? 'none' : 'block';
+    const isValid = parentIdRegex.test(this.value);
+    parentIdError.style.display = isValid ? 'none' : 'block';
+
 });
 
 // Validate parent name
@@ -72,9 +74,8 @@ document.getElementById('confirmPassword').addEventListener('input', function() 
 // Validate ward ID
 document.getElementById('wardId').addEventListener('input', function() {
     const wardIdError = document.getElementById('wardIdError');
-    // Assuming ward ID should be a non-empty string
-    // You might want to add more specific validation rules for ward ID format
-    wardIdError.style.display = this.value.trim() !== '' ? 'none' : 'block';
+    const wardIdRegex = /^STU-\d{3}$/i; // Case insensitive match for STU-XXX where X is digit
+    wardIdError.style.display = wardIdRegex.test(this.value) ? 'none' : 'block';
 });
 
 // Form submission
@@ -88,6 +89,7 @@ document.getElementById('parentRegistration').addEventListener('submit', functio
     if (isValid) {
         // Process form submission
         console.log('Form is valid, processing submission...');
+        this.submit(); // Actually submit the form
     }
 });
 
@@ -101,6 +103,7 @@ function validateForm() {
 
     const parentIdRegex = /^PRNT-\d{3}$/i;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const wardIdRegex = /^STU-\d{3}$/i;
     const passwordRegex = {
         minLength: /.{8,}/,
         uppercase: /[A-Z]/,
@@ -115,6 +118,6 @@ function validateForm() {
         emailRegex.test(email) &&
         Object.values(passwordRegex).every(regex => regex.test(password)) &&
         password === confirmPassword &&
-        wardId !== ''
+        wardIdRegex.test(wardId)
     );
 }
