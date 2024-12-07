@@ -51,10 +51,20 @@
                 <div class="card shadow">
                     <div class="card-body p-4">
                         <h2 class="text-center mb-4 text-primary">Teacher Login</h2>
-                        <form id="teacherLogin">
+                        <?php
+                        session_start();
+                        if (isset($_SESSION['error'])) {
+                            echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">';
+                            echo htmlspecialchars($_SESSION['error']);
+                            echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+                            echo '</div>';
+                            unset($_SESSION['error']);
+                        }
+                        ?>
+                        <form id="teacherLogin" method="POST" action="../actions/login_teacher.php">
                             <div class="mb-3">
                                 <label for="teacherId" class="form-label">Teacher ID</label>
-                                <input type="text" class="form-control" id="teacherId" name="teacherId" placeholder="e.g. TEACH-001" required>
+                                <input type="text" class="form-control" id="teacherId" name="teacher_id" placeholder="e.g. TEACH-001" required>
                                 <small id="teacherIdError" class="text-danger" style="display: none;">Please enter a valid teacher ID (format: TEACH-XXX)</small>
                             </div>
                             <div class="mb-3">
