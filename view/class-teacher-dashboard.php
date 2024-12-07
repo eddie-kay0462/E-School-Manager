@@ -74,6 +74,14 @@
             margin-right: 5px;
             font-size: 12px;
         }
+        
+        .course-data {
+            display: none;
+        }
+        
+        .course-data.active {
+            display: block;
+        }
     </style>
 </head>
 
@@ -164,44 +172,44 @@
 
                 <div id="attendance" class="tab-content card">
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h2>Today's Attendance</h2>
+                        <!-- Mathematics Attendance -->
+                        <div id="Mathematics-attendance" class="course-data">
+                            <h2>Mathematics Attendance</h2>
+                            <div class="student-attendance d-flex justify-content-between align-items-center">
+                                <span>John Smith</span>
+                                <div class="btn-group" role="group">
+                                    <input type="radio" class="btn-check" name="math_attendance_1" id="math_present_1" value="present">
+                                    <label class="btn btn-outline-success" for="math_present_1">Present</label>
+                                    <input type="radio" class="btn-check" name="math_attendance_1" id="math_absent_1" value="absent">
+                                    <label class="btn btn-outline-danger" for="math_absent_1">Absent</label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="mt-4">
+
+                        <!-- English Attendance -->
+                        <div id="English-attendance" class="course-data">
+                            <h2>English Attendance</h2>
                             <div class="student-attendance d-flex justify-content-between align-items-center">
-                                <span>John Doe</span>
+                                <span>Emma Wilson</span>
                                 <div class="btn-group" role="group">
-                                    <input type="radio" class="btn-check" name="attendance_1" id="present_1" value="present">
-                                    <label class="btn btn-outline-success" for="present_1">Present</label>
-                                    <input type="radio" class="btn-check" name="attendance_1" id="absent_1" value="absent">
-                                    <label class="btn btn-outline-danger" for="absent_1">Absent</label>
+                                    <input type="radio" class="btn-check" name="eng_attendance_1" id="eng_present_1" value="present">
+                                    <label class="btn btn-outline-success" for="eng_present_1">Present</label>
+                                    <input type="radio" class="btn-check" name="eng_attendance_1" id="eng_absent_1" value="absent">
+                                    <label class="btn btn-outline-danger" for="eng_absent_1">Absent</label>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Science Attendance -->
+                        <div id="Integrated Science-attendance" class="course-data">
+                            <h2>Science Attendance</h2>
                             <div class="student-attendance d-flex justify-content-between align-items-center">
-                                <span>Jane Smith</span>
+                                <span>David Brown</span>
                                 <div class="btn-group" role="group">
-                                    <input type="radio" class="btn-check" name="attendance_2" id="present_2" value="present">
-                                    <label class="btn btn-outline-success" for="present_2">Present</label>
-                                    <input type="radio" class="btn-check" name="attendance_2" id="absent_2" value="absent">
-                                    <label class="btn btn-outline-danger" for="absent_2">Absent</label>
-                                </div>
-                            </div>
-                            <div class="student-attendance d-flex justify-content-between align-items-center">
-                                <span>Michael Johnson</span>
-                                <div class="btn-group" role="group">
-                                    <input type="radio" class="btn-check" name="attendance_3" id="present_3" value="present">
-                                    <label class="btn btn-outline-success" for="present_3">Present</label>
-                                    <input type="radio" class="btn-check" name="attendance_3" id="absent_3" value="absent">
-                                    <label class="btn btn-outline-danger" for="absent_3">Absent</label>
-                                </div>
-                            </div>
-                            <div class="student-attendance d-flex justify-content-between align-items-center">
-                                <span>Sarah Williams</span>
-                                <div class="btn-group" role="group">
-                                    <input type="radio" class="btn-check" name="attendance_4" id="present_4" value="present">
-                                    <label class="btn btn-outline-success" for="present_4">Present</label>
-                                    <input type="radio" class="btn-check" name="attendance_4" id="absent_4" value="absent">
-                                    <label class="btn btn-outline-danger" for="absent_4">Absent</label>
+                                    <input type="radio" class="btn-check" name="sci_attendance_1" id="sci_present_1" value="present">
+                                    <label class="btn btn-outline-success" for="sci_present_1">Present</label>
+                                    <input type="radio" class="btn-check" name="sci_attendance_1" id="sci_absent_1" value="absent">
+                                    <label class="btn btn-outline-danger" for="sci_absent_1">Absent</label>
                                 </div>
                             </div>
                         </div>
@@ -210,124 +218,102 @@
 
                 <div id="grades" class="tab-content card">
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h2>Student Grades</h2>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Student ID</th>
-                                        <th>Student Name</th>
-                                        <th>Assignment</th>
-                                        <th>Classwork</th>
-                                        <th>Homework</th>
-                                        <th>Midterm</th>
-                                        <th>Final</th>
-                                        <th>Overall</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>STU001</td>
-                                        <td>John Doe</td>
-                                        <td><input type="number" class="form-control grade-input" value="85" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="90" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="88" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="92" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="95" min="0" max="100"></td>
-                                        <td>90</td>
-                                        <td>
-                                            <button class="btn btn-outline-primary btn-sm edit-btn">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>STU002</td>
-                                        <td>Jane Smith</td>
-                                        <td><input type="number" class="form-control grade-input" value="92" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="88" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="95" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="90" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="93" min="0" max="100"></td>
-                                        <td>92</td>
-                                        <td>
-                                            <button class="btn btn-outline-primary btn-sm edit-btn">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>STU003</td>
-                                        <td>Michael Johnson</td>
-                                        <td><input type="number" class="form-control grade-input" value="88" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="85" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="90" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="87" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="89" min="0" max="100"></td>
-                                        <td>88</td>
-                                        <td>
-                                            <button class="btn btn-outline-primary btn-sm edit-btn">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>STU004</td>
-                                        <td>Sarah Williams</td>
-                                        <td><input type="number" class="form-control grade-input" value="95" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="92" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="93" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="94" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="96" min="0" max="100"></td>
-                                        <td>94</td>
-                                        <td>
-                                            <button class="btn btn-outline-primary btn-sm edit-btn">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="text-end mt-3">
-                            <button class="btn btn-success" onclick="finalizeGrades()">
-                                <i class="fas fa-check-circle me-2"></i>Finalize All Grades and Submit
-                            </button>
-                        </div>
-
-                        <div class="row mt-4">
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <h3>Class Attendance Overview</h3>
-                                        </div>
-                                        <p>Total Students: 25</p>
-                                        <p>Present Today: 23</p>
-                                        <p>Absent Today: 2</p>
-                                        <p class="mb-0">Attendance Rate: 92%</p>
-                                    </div>
-                                </div>
+                        <!-- Mathematics Grades -->
+                        <div id="Mathematics-grades" class="course-data">
+                            <h2>Mathematics Grades</h2>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Student ID</th>
+                                            <th>Student Name</th>
+                                            <th>Assignment</th>
+                                            <th>Test</th>
+                                            <th>Final</th>
+                                            <th>Overall</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>MATH001</td>
+                                            <td>John Smith</td>
+                                            <td><input type="number" class="form-control grade-input" value="85"></td>
+                                            <td><input type="number" class="form-control grade-input" value="78"></td>
+                                            <td><input type="number" class="form-control grade-input" value="92"></td>
+                                            <td>85</td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <h3>Class Performance</h3>
-                                        </div>
-                                        <p>Class Average: 89.5%</p>
-                                        <p>Highest Score: 96%</p>
-                                        <p class="mb-0">Lowest Score: 82%</p>
-                                    </div>
-                                </div>
+                        </div>
+
+                        <!-- English Grades -->
+                        <div id="English-grades" class="course-data">
+                            <h2>English Grades</h2>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Student ID</th>
+                                            <th>Student Name</th>
+                                            <th>Essays</th>
+                                            <th>Speaking</th>
+                                            <th>Final</th>
+                                            <th>Overall</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>ENG001</td>
+                                            <td>Emma Wilson</td>
+                                            <td><input type="number" class="form-control grade-input" value="92"></td>
+                                            <td><input type="number" class="form-control grade-input" value="88"></td>
+                                            <td><input type="number" class="form-control grade-input" value="90"></td>
+                                            <td>90</td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Science Grades -->
+                        <div id="Integrated Science-grades" class="course-data">
+                            <h2>Science Grades</h2>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Student ID</th>
+                                            <th>Student Name</th>
+                                            <th>Lab Work</th>
+                                            <th>Theory</th>
+                                            <th>Final</th>
+                                            <th>Overall</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>SCI001</td>
+                                            <td>David Brown</td>
+                                            <td><input type="number" class="form-control grade-input" value="95"></td>
+                                            <td><input type="number" class="form-control grade-input" value="87"></td>
+                                            <td><input type="number" class="form-control grade-input" value="91"></td>
+                                            <td>91</td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -414,6 +400,15 @@
             const courseRecords = document.getElementById('courseRecords');
             const courseTitle = document.getElementById('courseTitle');
             const courseMessage = document.getElementById('courseMessage');
+
+            // Hide all course-specific data
+            document.querySelectorAll('.course-data').forEach(data => {
+                data.classList.remove('active');
+            });
+
+            // Show course-specific data
+            document.getElementById(`${courseName}-attendance`).classList.add('active');
+            document.getElementById(`${courseName}-grades`).classList.add('active');
 
             courseTitle.textContent = courseName;
             courseMessage.textContent = `Viewing records for ${courseName} course`;
