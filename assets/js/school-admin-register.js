@@ -15,7 +15,10 @@ document.querySelectorAll('input').forEach(input => {
         }
     });
 });
-
+document.getElementById('adminId').addEventListener('input', function() {
+    const adminIdError = document.getElementById('adminIdError');
+    adminIdError.style.display = this.value.trim().match(/^ADMIN-\d{3}$/) ? 'none' : 'block';
+});
 // Validate first name
 document.getElementById('firstName').addEventListener('input', function() {
     const firstNameError = document.getElementById('firstNameError');
