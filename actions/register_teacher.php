@@ -29,7 +29,7 @@ if (
         $checkStmt->bind_param("s", $teacherId);
         $checkStmt->execute();
         $result = $checkStmt->get_result();
-        
+
         if ($result->num_rows > 0) {
             $_SESSION['error'] = "Teacher ID " . $teacherId . " is already registered. Please choose a different ID.";
             header("Location: ../view/teacher-registration.php");
@@ -41,7 +41,7 @@ if (
         $checkEmailStmt->bind_param("s", $email);
         $checkEmailStmt->execute();
         $emailResult = $checkEmailStmt->get_result();
-        
+
         if ($emailResult->num_rows > 0) {
             $_SESSION['error'] = "Email address " . $email . " is already registered. Please use a different email.";
             header("Location: ../view/teacher-registration.php");
@@ -58,15 +58,17 @@ if (
             $checkClassTeacherStmt->bind_param("ss", $class, $academicYear);
             $checkClassTeacherStmt->execute();
             $classTeacherResult = $checkClassTeacherStmt->get_result();
-            
+
             if ($classTeacherResult->num_rows > 0) {
                 $classTeacher = $classTeacherResult->fetch_assoc();
-                $_SESSION['error'] = "Class " . strtoupper($class) . " already has a class teacher assigned (" . 
+                $_SESSION['error'] = "Class " . strtoupper($class) . " already has a class teacher assigned (" .
                     $classTeacher['first_name'] . " " . $classTeacher['last_name'] . ").";
                 header("Location: ../view/teacher-registration.php");
                 exit();
             }
         }
+
+
 
         // If all checks pass, proceed with registration
         // Insert into users table first
@@ -107,7 +109,12 @@ if (
         // Commit transaction
         $conn->commit();
         $_SESSION['success'] = "Teacher registered successfully!";
-        header("Location: ../view/teacher-registration.php");
+
+        if ($isClassTeacher) {
+            header("Location: ../view/class-teacher-dashboard.php");
+        } else {
+            header("Location: ../view/non-class-teacher-dashboard.php");
+        }
     } catch (Exception $e) {
         // Rollback transaction on error
         $conn->rollback();
