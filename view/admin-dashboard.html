@@ -147,25 +147,29 @@
                         <h5 class="card-title mb-0">Register New Student</h5>
                     </div>
                     <div class="card-body">
-                        <form id="studentRegistrationForm">
+                        <form id="studentRegistrationForm" action="../actions/register-student.php" method="post">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="studentId" class="form-label">Student ID</label>
                                     <input type="text" class="form-control" id="studentId" name="studentId" required>
+                                    <span class="text-danger" id="studentIdError" style="display: none;">Please enter a valid student ID (format: STU-XXX)</span>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="firstName" class="form-label">First Name</label>
                                     <input type="text" class="form-control" id="firstName" name="firstName" required>
+                                    <span class="text-danger" id="firstNameError" style="display: none;">Please enter a valid first name</span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="lastName" class="form-label">Last Name</label>
                                     <input type="text" class="form-control" id="lastName" name="lastName" required>
+                                    <span class="text-danger" id="lastNameError" style="display: none;">Please enter a valid last name</span>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="dob" class="form-label">Date of Birth</label>
                                     <input type="date" class="form-control" id="dob" name="dob" required>
+                                    <span class="text-danger" id="dobError" style="display: none;">Please enter a valid date of birth (age must be between 10-20 years)</span>
                                 </div>
                             </div>
                             <div class="row">
@@ -177,6 +181,7 @@
                                         <option value="female">Female</option>
                                         <option value="other">Other</option>
                                     </select>
+                                    <span class="text-danger" id="genderError" style="display: none;">Please select a gender</span>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Class</label>
@@ -194,11 +199,13 @@
                                             <label class="form-check-label" for="jss3">JSS 3</label>
                                         </div>
                                     </div>
+                                    <span class="text-danger" id="classError" style="display: none;">Please select a class</span>
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label for="enrollmentDate" class="form-label">Enrollment Date</label>
                                 <input type="date" class="form-control" id="enrollmentDate" name="enrollmentDate" required>
+                                <span class="text-danger" id="enrollmentDateError" style="display: none;">Please enter a valid enrollment date</span>
                             </div>
                             <div class="text-end">
                                 <button type="submit" class="btn btn-primary">
