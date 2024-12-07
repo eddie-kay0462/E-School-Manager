@@ -99,7 +99,12 @@
                             unset($_SESSION['error']);
                         }
                         ?>
-                        <form id="adminRegistrationForm" method="POST" action="../actions/admin_register_backend.php">
+                        <form id="adminRegistrationForm" method="POST" action="../actions/school-admin-register-backend.php">
+                            <div class="mb-3">
+                                <label for="adminId" class="form-label">Admin ID</label>
+                                <input type="text" class="form-control" id="adminId" name="adminId" pattern="ADMIN-\d{3}" placeholder="ADMIN-XXX" required>
+                                <div id="adminIdError" class="text-danger" style="display: none;">Admin ID must be in format ADMIN-XXX where X is a number</div>
+                            </div>
                             <div class="mb-3">
                                 <label for="firstName" class="form-label">First Name</label>
                                 <input type="text" class="form-control" id="firstName" name="firstName" required>
@@ -118,7 +123,7 @@
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="password" name="password" required>
-                                <div id="passwordError" class="text-danger">Password must meet the following requirements:</div>
+                                <!-- <div id="passwordError" class="text-danger">Password must meet the following requirements:</div> -->
                                 <div id="minLength" class="text-danger" style="display: none;">- At least 8 characters long</div>
                                 <div id="uppercase" class="text-danger" style="display: none;">- At least one uppercase letter</div>
                                 <div id="lowercase" class="text-danger" style="display: none;">- At least one lowercase letter</div>
