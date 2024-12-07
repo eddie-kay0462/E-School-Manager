@@ -217,6 +217,7 @@
                             <table class="table table-hover">
                                 <thead class="table-primary">
                                     <tr>
+                                        <th>Student ID</th>
                                         <th>Student Name</th>
                                         <th>Assignment</th>
                                         <th>Classwork</th>
@@ -229,6 +230,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td>STU001</td>
                                         <td>John Doe</td>
                                         <td><input type="number" class="form-control grade-input" value="85" min="0" max="100"></td>
                                         <td><input type="number" class="form-control grade-input" value="90" min="0" max="100"></td>
@@ -244,6 +246,7 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td>STU002</td>
                                         <td>Jane Smith</td>
                                         <td><input type="number" class="form-control grade-input" value="92" min="0" max="100"></td>
                                         <td><input type="number" class="form-control grade-input" value="88" min="0" max="100"></td>
@@ -259,6 +262,7 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td>STU003</td>
                                         <td>Michael Johnson</td>
                                         <td><input type="number" class="form-control grade-input" value="88" min="0" max="100"></td>
                                         <td><input type="number" class="form-control grade-input" value="85" min="0" max="100"></td>
@@ -274,6 +278,7 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td>STU004</td>
                                         <td>Sarah Williams</td>
                                         <td><input type="number" class="form-control grade-input" value="95" min="0" max="100"></td>
                                         <td><input type="number" class="form-control grade-input" value="92" min="0" max="100"></td>
