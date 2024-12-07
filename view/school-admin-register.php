@@ -6,30 +6,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Registration - Josephus Memorial School</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/admin-registration.css">
     <style>
         :root {
-            --primary-green: #2E7D32;
-            --light-green: #4CAF50;
+            --primary-green: #198754;
+            --light-green: #28a745;
+        }
+
+        body {
+            background: #f8f9fa;
+            padding-bottom: 60px;
+        }
+
+        .navbar {
+            background-color: var(--primary-green);
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
         }
 
         .btn-primary {
             background-color: var(--primary-green);
             border-color: var(--primary-green);
+            transition: all 0.3s ease;
         }
 
         .btn-primary:hover {
             background-color: var(--light-green);
             border-color: var(--light-green);
+            transform: scale(1.02);
         }
 
         .text-primary {
             color: var(--primary-green) !important;
         }
+
+        .form-control:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+        }
+
+        .alert {
+            border-radius: 8px;
+        }
+
+        .fixed-bottom {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
     </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="../index.php">Josephus Memorial School</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -39,6 +71,12 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="../index.php">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
                     </li>
                 </ul>
             </div>
@@ -61,31 +99,37 @@
                             unset($_SESSION['error']);
                         }
                         ?>
-                        <form id="adminRegistration" method="POST" action="../actions/admin_register_backend.php">
+                        <form id="adminRegistrationForm" method="POST" action="../actions/admin_register_backend.php">
                             <div class="mb-3">
                                 <label for="firstName" class="form-label">First Name</label>
                                 <input type="text" class="form-control" id="firstName" name="firstName" required>
-                                <div class="invalid-feedback" id="firstNameError"></div>
+                                <span class="text-danger" id="firstNameError" style="display: none;">Please enter your first name</span>
                             </div>
                             <div class="mb-3">
                                 <label for="lastName" class="form-label">Last Name</label>
                                 <input type="text" class="form-control" id="lastName" name="lastName" required>
-                                <div class="invalid-feedback" id="lastNameError"></div>
+                                <span class="text-danger" id="lastNameError" style="display: none;">Please enter your last name</span>
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email" class="form-control" id="email" name="email" required>
-                                <div class="invalid-feedback" id="emailError"></div>
+                                <span class="text-danger" id="emailError" style="display: none;">Please enter a valid email address</span>
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="password" name="password" required>
-                                <div class="invalid-feedback" id="passwordError"></div>
+                                <span class="text-danger" id="passwordError" style="display: none;">
+                                    Password must contain at least:
+                                    <br>- 8 characters
+                                    <br>- One uppercase letter (A-Z)
+                                    <br>- One lowercase letter (a-z)
+                                    <br>- One number (0-9)
+                                </span>
                             </div>
                             <div class="mb-3">
                                 <label for="confirmPassword" class="form-label">Confirm Password</label>
                                 <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
-                                <div class="invalid-feedback" id="confirmPasswordError"></div>
+                                <span class="text-danger" id="confirmPasswordError" style="display: none;">Passwords do not match</span>
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Register</button>
                             <div class="text-center mt-3">
@@ -103,6 +147,7 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/school-admin-register.js"></script>
 </body>
 
 </html>
