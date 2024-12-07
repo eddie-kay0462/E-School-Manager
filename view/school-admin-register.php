@@ -102,8 +102,8 @@
                         <form id="adminRegistrationForm" method="POST" action="../actions/school-admin-register-backend.php">
                             <div class="mb-3">
                                 <label for="adminId" class="form-label">Admin ID</label>
-                                <input type="text" class="form-control" id="adminId" name="adminId" pattern="ADMIN-\d{3}" placeholder="ADMIN-XXX" required>
-                                <div id="adminIdError" class="text-danger" style="display: none;">Admin ID must be in format ADMIN-XXX where X is a number</div>
+                                <input type="text" class="form-control" id="adminId" name="adminId" pattern="ADMIN-\d{3}" required>
+                                <div id="adminIdError" class="text-danger" style="display: none;">Enter a valid Admin ID</div>
                             </div>
                             <div class="mb-3">
                                 <label for="firstName" class="form-label">First Name</label>
