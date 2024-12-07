@@ -103,33 +103,32 @@
                             <div class="mb-3">
                                 <label for="firstName" class="form-label">First Name</label>
                                 <input type="text" class="form-control" id="firstName" name="firstName" required>
-                                <span class="text-danger" id="firstNameError" style="display: none;">Please enter your first name</span>
+                                <div id="firstNameError" class="text-danger" style="display: none;">First name must be at least 2 characters long</div>
                             </div>
                             <div class="mb-3">
                                 <label for="lastName" class="form-label">Last Name</label>
                                 <input type="text" class="form-control" id="lastName" name="lastName" required>
-                                <span class="text-danger" id="lastNameError" style="display: none;">Please enter your last name</span>
+                                <div id="lastNameError" class="text-danger" style="display: none;">Last name must be at least 2 characters long</div>
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email" class="form-control" id="email" name="email" required>
-                                <span class="text-danger" id="emailError" style="display: none;">Please enter a valid email address</span>
+                                <div id="emailError" class="text-danger" style="display: none;">Please enter a valid email address</div>
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="password" name="password" required>
-                                <span class="text-danger" id="passwordError" style="display: none;">
-                                    Password must contain at least:
-                                    <br>- 8 characters
-                                    <br>- One uppercase letter (A-Z)
-                                    <br>- One lowercase letter (a-z)
-                                    <br>- One number (0-9)
-                                </span>
+                                <div id="passwordError" class="text-danger">Password must meet the following requirements:</div>
+                                <div id="minLength" class="text-danger" style="display: none;">- At least 8 characters long</div>
+                                <div id="uppercase" class="text-danger" style="display: none;">- At least one uppercase letter</div>
+                                <div id="lowercase" class="text-danger" style="display: none;">- At least one lowercase letter</div>
+                                <div id="number" class="text-danger" style="display: none;">- At least one number</div>
+                                <div id="specialChar" class="text-danger" style="display: none;">- At least one special character (@$!%*?&)</div>
                             </div>
                             <div class="mb-3">
                                 <label for="confirmPassword" class="form-label">Confirm Password</label>
                                 <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
-                                <span class="text-danger" id="confirmPasswordError" style="display: none;">Passwords do not match</span>
+                                <div id="confirmPasswordError" class="text-danger" style="display: none;">Passwords do not match</div>
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Register</button>
                             <div class="text-center mt-3">
