@@ -74,11 +74,11 @@
             margin-right: 5px;
             font-size: 12px;
         }
-        
+
         .course-data {
             display: none;
         }
-        
+
         .course-data.active {
             display: block;
         }
@@ -227,9 +227,10 @@
                                         <tr>
                                             <th>Student ID</th>
                                             <th>Student Name</th>
-                                            <th>Assignment</th>
-                                            <th>Test</th>
-                                            <th>Final</th>
+                                            <th>Classwork</th>
+                                            <th>Homework</th>
+                                            <th>Midterm Exam</th>
+                                            <th>Final Exam</th>
                                             <th>Overall</th>
                                             <th>Action</th>
                                         </tr>
@@ -240,10 +241,13 @@
                                             <td>John Smith</td>
                                             <td><input type="number" class="form-control grade-input" value="85"></td>
                                             <td><input type="number" class="form-control grade-input" value="78"></td>
+                                            <td><input type="number" class="form-control grade-input" value="82"></td>
                                             <td><input type="number" class="form-control grade-input" value="92"></td>
                                             <td>85</td>
                                             <td>
                                                 <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
+                                                <button class="btn btn-danger btn-sm" onclick="deleteGrades(this)">Delete</button>
+                                                <button class="btn btn-warning btn-sm" onclick="updateGrades(this)">Update</button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -260,9 +264,10 @@
                                         <tr>
                                             <th>Student ID</th>
                                             <th>Student Name</th>
-                                            <th>Essays</th>
-                                            <th>Speaking</th>
-                                            <th>Final</th>
+                                            <th>Classwork</th>
+                                            <th>Homework</th>
+                                            <th>Midterm Exam</th>
+                                            <th>Final Exam</th>
                                             <th>Overall</th>
                                             <th>Action</th>
                                         </tr>
@@ -273,10 +278,13 @@
                                             <td>Emma Wilson</td>
                                             <td><input type="number" class="form-control grade-input" value="92"></td>
                                             <td><input type="number" class="form-control grade-input" value="88"></td>
+                                            <td><input type="number" class="form-control grade-input" value="85"></td>
                                             <td><input type="number" class="form-control grade-input" value="90"></td>
                                             <td>90</td>
                                             <td>
                                                 <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
+                                                <button class="btn btn-danger btn-sm" onclick="deleteGrades(this)">Delete</button>
+                                                <button class="btn btn-warning btn-sm" onclick="updateGrades(this)">Update</button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -293,9 +301,10 @@
                                         <tr>
                                             <th>Student ID</th>
                                             <th>Student Name</th>
-                                            <th>Lab Work</th>
-                                            <th>Theory</th>
-                                            <th>Final</th>
+                                            <th>Classwork</th>
+                                            <th>Homework</th>
+                                            <th>Midterm Exam</th>
+                                            <th>Final Exam</th>
                                             <th>Overall</th>
                                             <th>Action</th>
                                         </tr>
@@ -306,10 +315,13 @@
                                             <td>David Brown</td>
                                             <td><input type="number" class="form-control grade-input" value="95"></td>
                                             <td><input type="number" class="form-control grade-input" value="87"></td>
+                                            <td><input type="number" class="form-control grade-input" value="89"></td>
                                             <td><input type="number" class="form-control grade-input" value="91"></td>
                                             <td>91</td>
                                             <td>
                                                 <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
+                                                <button class="btn btn-danger btn-sm" onclick="deleteGrades(this)">Delete</button>
+                                                <button class="btn btn-warning btn-sm" onclick="updateGrades(this)">Update</button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -432,6 +444,32 @@
                 button.textContent = 'Save';
                 button.disabled = false;
             }, 2000);
+        }
+
+        function deleteGrades(button) {
+            if (confirm('Are you sure you want to delete these grades?')) {
+                const row = button.closest('tr');
+                row.remove();
+            }
+        }
+
+        function updateGrades(button) {
+            const row = button.closest('tr');
+            const inputs = row.querySelectorAll('input[type="number"]');
+            
+            inputs.forEach(input => {
+                input.disabled = false;
+            });
+
+            button.textContent = 'Confirm';
+            button.onclick = function() {
+                inputs.forEach(input => {
+                    input.disabled = true;
+                });
+                saveGrades(button);
+                button.textContent = 'Update';
+                button.onclick = function() { updateGrades(button); };
+            };
         }
 
         function finalizeGrades() {
