@@ -135,9 +135,9 @@
                     </div>
                 </div>
 
-                <div id="grades" class="tab-content card active">
+                <div id="Mathematics" class="tab-content card">
                     <div class="card-body">
-                        <h2>Student Grades</h2>
+                        <h2>Mathematics - Student Grades</h2>
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead class="table-primary">
@@ -149,7 +149,7 @@
                                         <th>Midterm</th>
                                         <th>Final</th>
                                         <th>Overall</th>
-                                        <th>Action</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -161,8 +161,36 @@
                                         <td><input type="number" class="form-control grade-input" value="92" min="0" max="100"></td>
                                         <td><input type="number" class="form-control grade-input" value="95" min="0" max="100"></td>
                                         <td>90</td>
-                                        <td><button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button></td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
+                                            <button class="btn btn-warning btn-sm" onclick="updateGrades(this)">Update</button>
+                                            <button class="btn btn-danger btn-sm" onclick="deleteGrades(this)">Delete</button>
+                                        </td>
                                     </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="English" class="tab-content card">
+                    <div class="card-body">
+                        <h2>English - Student Grades</h2>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Assignment</th>
+                                        <th>Classwork</th>
+                                        <th>Homework</th>
+                                        <th>Midterm</th>
+                                        <th>Final</th>
+                                        <th>Overall</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                     <tr>
                                         <td>Jane Smith</td>
                                         <td><input type="number" class="form-control grade-input" value="92" min="0" max="100"></td>
@@ -171,8 +199,36 @@
                                         <td><input type="number" class="form-control grade-input" value="90" min="0" max="100"></td>
                                         <td><input type="number" class="form-control grade-input" value="93" min="0" max="100"></td>
                                         <td>92</td>
-                                        <td><button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button></td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
+                                            <button class="btn btn-warning btn-sm" onclick="updateGrades(this)">Update</button>
+                                            <button class="btn btn-danger btn-sm" onclick="deleteGrades(this)">Delete</button>
+                                        </td>
                                     </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="Integrated Science" class="tab-content card">
+                    <div class="card-body">
+                        <h2>Integrated Science - Student Grades</h2>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Assignment</th>
+                                        <th>Classwork</th>
+                                        <th>Homework</th>
+                                        <th>Midterm</th>
+                                        <th>Final</th>
+                                        <th>Overall</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                     <tr>
                                         <td>Michael Johnson</td>
                                         <td><input type="number" class="form-control grade-input" value="88" min="0" max="100"></td>
@@ -181,8 +237,36 @@
                                         <td><input type="number" class="form-control grade-input" value="87" min="0" max="100"></td>
                                         <td><input type="number" class="form-control grade-input" value="89" min="0" max="100"></td>
                                         <td>88</td>
-                                        <td><button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button></td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
+                                            <button class="btn btn-warning btn-sm" onclick="updateGrades(this)">Update</button>
+                                            <button class="btn btn-danger btn-sm" onclick="deleteGrades(this)">Delete</button>
+                                        </td>
                                     </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="Social Studies" class="tab-content card">
+                    <div class="card-body">
+                        <h2>Social Studies - Student Grades</h2>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Assignment</th>
+                                        <th>Classwork</th>
+                                        <th>Homework</th>
+                                        <th>Midterm</th>
+                                        <th>Final</th>
+                                        <th>Overall</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                     <tr>
                                         <td>Sarah Williams</td>
                                         <td><input type="number" class="form-control grade-input" value="95" min="0" max="100"></td>
@@ -191,32 +275,56 @@
                                         <td><input type="number" class="form-control grade-input" value="94" min="0" max="100"></td>
                                         <td><input type="number" class="form-control grade-input" value="96" min="0" max="100"></td>
                                         <td>94</td>
-                                        <td><button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button></td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
+                                            <button class="btn btn-warning btn-sm" onclick="updateGrades(this)">Update</button>
+                                            <button class="btn btn-danger btn-sm" onclick="deleteGrades(this)">Delete</button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
 
-                        <div class="row mt-4">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h3>Class Performance</h3>
-                                        <p>Class Average: 89.5%</p>
-                                        <p>Highest Score: 96%</p>
-                                        <p class="mb-0">Lowest Score: 82%</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="text-center mt-4">
-                            <button class="btn btn-primary btn-lg" onclick="finalizeGrades()">
-                                <i class="fas fa-check-circle me-2"></i>Finalize and Submit All Grades
-                            </button>
+                <div id="French" class="tab-content card">
+                    <div class="card-body">
+                        <h2>French - Student Grades</h2>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Assignment</th>
+                                        <th>Classwork</th>
+                                        <th>Homework</th>
+                                        <th>Midterm</th>
+                                        <th>Final</th>
+                                        <th>Overall</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Emma Davis</td>
+                                        <td><input type="number" class="form-control grade-input" value="91" min="0" max="100"></td>
+                                        <td><input type="number" class="form-control grade-input" value="89" min="0" max="100"></td>
+                                        <td><input type="number" class="form-control grade-input" value="94" min="0" max="100"></td>
+                                        <td><input type="number" class="form-control grade-input" value="88" min="0" max="100"></td>
+                                        <td><input type="number" class="form-control grade-input" value="92" min="0" max="100"></td>
+                                        <td>91</td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
+                                            <button class="btn btn-warning btn-sm" onclick="updateGrades(this)">Update</button>
+                                            <button class="btn btn-danger btn-sm" onclick="deleteGrades(this)">Delete</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -228,6 +336,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function showCourseRecords(courseName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected course tab
+            document.getElementById(courseName).classList.add('active');
+
+            // Update course info card
             const courseRecords = document.getElementById('courseRecords');
             const courseTitle = document.getElementById('courseTitle');
             const courseMessage = document.getElementById('courseMessage');
@@ -256,6 +373,30 @@
             }, 2000);
         }
 
+        function updateGrades(button) {
+            const row = button.closest('tr');
+            const inputs = row.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.disabled = false;
+            });
+            button.textContent = 'Confirm';
+            button.onclick = function() {
+                saveGrades(button);
+                inputs.forEach(input => {
+                    input.disabled = true;
+                });
+                button.textContent = 'Update';
+                button.onclick = function() { updateGrades(button); };
+            };
+        }
+
+        function deleteGrades(button) {
+            if(confirm('Are you sure you want to delete these grades?')) {
+                const row = button.closest('tr');
+                row.remove();
+            }
+        }
+
         function finalizeGrades() {
             if (confirm('Are you sure you want to finalize and submit all grades? This action cannot be undone.')) {
                 // Here you would typically send the data to your backend
@@ -270,6 +411,11 @@
                 });
             }
         }
+
+        // Show Mathematics tab by default
+        document.addEventListener('DOMContentLoaded', () => {
+            showCourseRecords('Mathematics');
+        });
     </script>
 </body>
 
