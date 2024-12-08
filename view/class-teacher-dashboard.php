@@ -227,11 +227,11 @@
                                         <tr>
                                             <th>Student ID</th>
                                             <th>Student Name</th>
-                                            <th>Classwork</th>
-                                            <th>Homework</th>
-                                            <th>Midterm Exam</th>
-                                            <th>Final Exam</th>
-                                            <th>Overall</th>
+                                            <th>Classwork (10%)</th>
+                                            <th>Homework (10%)</th>
+                                            <th>Midterm Exam (10%)</th>
+                                            <th>Final Exam (10%)</th>
+                                            <th>Overall (100%)</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -264,11 +264,11 @@
                                         <tr>
                                             <th>Student ID</th>
                                             <th>Student Name</th>
-                                            <th>Classwork</th>
-                                            <th>Homework</th>
-                                            <th>Midterm Exam</th>
-                                            <th>Final Exam</th>
-                                            <th>Overall</th>
+                                            <th>Classwork (10%)</th>
+                                            <th>Homework (10%)</th>
+                                            <th>Midterm Exam (10%)</th>
+                                            <th>Final Exam (10%)</th>
+                                            <th>Overall (100%)</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -301,11 +301,11 @@
                                         <tr>
                                             <th>Student ID</th>
                                             <th>Student Name</th>
-                                            <th>Classwork</th>
-                                            <th>Homework</th>
-                                            <th>Midterm Exam</th>
-                                            <th>Final Exam</th>
-                                            <th>Overall</th>
+                                            <th>Classwork (10%)</th>
+                                            <th>Homework (10%)</th>
+                                            <th>Midterm Exam (10%)</th>
+                                            <th>Final Exam (10%)</th>
+                                            <th>Overall (100%)</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
