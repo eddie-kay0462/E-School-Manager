@@ -143,12 +143,12 @@
                                 <thead class="table-primary">
                                     <tr>
                                         <th>Student Name</th>
-                                        <th>Assignment</th>
-                                        <th>Classwork</th>
-                                        <th>Homework</th>
-                                        <th>Midterm</th>
-                                        <th>Final</th>
-                                        <th>Overall</th>
+                                        <th>Assignment (10%)</th>
+                                        <th>Classwork (10%)</th>
+                                        <th>Homework (10%)</th>
+                                        <th>Midterm (10%)</th>
+                                        <th>Final (10%)</th>
+                                        <th>Overall (100%)</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -181,12 +181,12 @@
                                 <thead class="table-primary">
                                     <tr>
                                         <th>Student Name</th>
-                                        <th>Assignment</th>
-                                        <th>Classwork</th>
-                                        <th>Homework</th>
-                                        <th>Midterm</th>
-                                        <th>Final</th>
-                                        <th>Overall</th>
+                                        <th>Assignment (10%)</th>
+                                        <th>Classwork (10%)</th>
+                                        <th>Homework (10%)</th>
+                                        <th>Midterm (10%)</th>
+                                        <th>Final (10%)</th>
+                                        <th>Overall (100%)</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -219,12 +219,12 @@
                                 <thead class="table-primary">
                                     <tr>
                                         <th>Student Name</th>
-                                        <th>Assignment</th>
-                                        <th>Classwork</th>
-                                        <th>Homework</th>
-                                        <th>Midterm</th>
-                                        <th>Final</th>
-                                        <th>Overall</th>
+                                        <th>Assignment (10%)</th>
+                                        <th>Classwork (10%)</th>
+                                        <th>Homework (10%)</th>
+                                        <th>Midterm (10%)</th>
+                                        <th>Final (10%)</th>
+                                        <th>Overall (100%)</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -257,12 +257,12 @@
                                 <thead class="table-primary">
                                     <tr>
                                         <th>Student Name</th>
-                                        <th>Assignment</th>
-                                        <th>Classwork</th>
-                                        <th>Homework</th>
-                                        <th>Midterm</th>
-                                        <th>Final</th>
-                                        <th>Overall</th>
+                                        <th>Assignment (10%)</th>
+                                        <th>Classwork (10%)</th>
+                                        <th>Homework (10%)</th>
+                                        <th>Midterm (10%)</th>
+                                        <th>Final (10%)</th>
+                                        <th>Overall (100%)</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -295,12 +295,12 @@
                                 <thead class="table-primary">
                                     <tr>
                                         <th>Student Name</th>
-                                        <th>Assignment</th>
-                                        <th>Classwork</th>
-                                        <th>Homework</th>
-                                        <th>Midterm</th>
-                                        <th>Final</th>
-                                        <th>Overall</th>
+                                        <th>Assignment (10%)</th>
+                                        <th>Classwork (10%)</th>
+                                        <th>Homework (10%)</th>
+                                        <th>Midterm (10%)</th>
+                                        <th>Final (10%)</th>
+                                        <th>Overall (100%)</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -386,12 +386,14 @@
                     input.disabled = true;
                 });
                 button.textContent = 'Update';
-                button.onclick = function() { updateGrades(button); };
+                button.onclick = function() {
+                    updateGrades(button);
+                };
             };
         }
 
         function deleteGrades(button) {
-            if(confirm('Are you sure you want to delete these grades?')) {
+            if (confirm('Are you sure you want to delete these grades?')) {
                 const row = button.closest('tr');
                 row.remove();
             }
