@@ -53,6 +53,12 @@ if (isset($_POST['teacher_id']) && isset($_POST['email']) && isset($_POST['passw
                 $_SESSION['teacher_id'] = $user['teacher_id'];
                 $_SESSION['first_name'] = $user['first_name'];
                 $_SESSION['user_type'] = 'teacher';
+                //check if teacher is class teacher
+                $stmt = $conn->prepare("SELECT is_class_teacher FROM teachers WHERE teacher_id = ?");
+                $stmt->bind_param("s", $teacherId);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $user = $result->fetch_assoc();
                 if ($user['is_class_teacher']) {
                     header("Location: ../view/class-teacher-dashboard.php");
                 } else {
