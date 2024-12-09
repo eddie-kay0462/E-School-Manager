@@ -106,6 +106,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Contact</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../actions/logout.php" onclick="logout()">Logout</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -456,7 +459,7 @@
         function updateGrades(button) {
             const row = button.closest('tr');
             const inputs = row.querySelectorAll('input[type="number"]');
-            
+
             inputs.forEach(input => {
                 input.disabled = false;
             });
@@ -468,7 +471,9 @@
                 });
                 saveGrades(button);
                 button.textContent = 'Update';
-                button.onclick = function() { updateGrades(button); };
+                button.onclick = function() {
+                    updateGrades(button);
+                };
             };
         }
 
