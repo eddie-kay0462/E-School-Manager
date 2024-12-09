@@ -20,7 +20,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="../index.html">Home</a>
+                        <a class="nav-link" href="../index.php">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">About</a>
@@ -202,7 +202,7 @@
 
                             <button type="submit" class="btn btn-primary w-100">Sign Up</button>
                             <div class="text-center mt-3">
-                                <a href="teacher-login.html" class="text-decoration-none text-primary">Already have an account? Login here</a>
+                                <a href="teacher-login.php" class="text-decoration-none text-primary">Already have an account? Login here</a>
                             </div>
                         </form>
                     </div>
