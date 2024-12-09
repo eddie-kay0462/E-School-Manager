@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="../assets/css/parent-registration.css">
 </head>
 <body class="bg-light">
+    <?php
+    session_start();
+    ?>
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-green);">
         <div class="container">
             <a class="navbar-brand" href="#">Josephus Memorial School</a>
@@ -17,7 +20,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="../index.html">Home</a>
+                        <a class="nav-link" href="../index.php">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">About</a>
@@ -34,12 +37,39 @@
     </nav>
 
     <div class="container py-5">
+        <?php if(isset($_SESSION['error'])): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <?php 
+                echo $_SESSION['error'];
+                unset($_SESSION['error']);
+                ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+
+        <?php if(isset($_SESSION['success'])): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?php 
+                echo $_SESSION['success'];
+                unset($_SESSION['success']);
+                ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">
                 <div class="card shadow">
                     <div class="card-body p-4">
                         <h1 class="text-center mb-4">Parent Registration</h1>
                         <form id="parentRegistration" method="POST" action="../actions/register_parent.php">
+                            <div class="mb-3">
+                                <label for="parent_id" class="form-label">Parent ID</label>
+                                <input type="text" class="form-control" id="parent_id" name="parent_id" required>
+                                <small class="form-text text-muted">Format: PRNT-XXX (e.g., PRNT-001, PRNT-002)</small>
+                                <span class="text-danger" id="parentIdError" style="display: none;">Please enter a valid Parent ID</span>
+                            </div>
+
                             <div class="mb-3">
                                 <label for="parentName" class="form-label">Name</label>
                                 <input type="text" class="form-control" id="parentName" name="parentName" required>
@@ -74,12 +104,13 @@
                             <div class="mb-3">
                                 <label for="wardId" class="form-label">ID of Ward</label>
                                 <input type="text" class="form-control" id="wardId" name="wardId" required>
+                                <small class="form-text text-muted">Your ward's student ID (e.g., STU-001)</small>
                                 <span class="text-danger" id="wardIdError" style="display: none;">Please enter your ward's ID</span>
                             </div>
 
                             <button type="submit" class="btn btn-primary w-100">Sign Up</button>
                             <div class="text-center mt-3">
-                                <a href="parent-login.html" class="text-decoration-none" style="color: var(--primary-green);">Already have an account? Login here</a>
+                                <a href="parent-login.php" class="text-decoration-none" style="color: var(--primary-green);">Already have an account? Login here</a>
                             </div>
                         </form>
                     </div>
