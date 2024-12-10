@@ -8,11 +8,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/admin-dashboard.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
 </head>
 
 <body>
     <?php
     session_start();
+    require_once('../db/config2.php');
     ?>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
@@ -40,27 +42,27 @@
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#dashboard">
+                            <a class="nav-link" href="#dashboard" onclick="showSection('dashboard')">
                                 <i class="fas fa-tachometer-alt"></i> Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#teachers">
+                            <a class="nav-link" href="#teachers" onclick="showSection('teachers')">
                                 <i class="fas fa-chalkboard-teacher"></i> Teachers
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#students">
+                            <a class="nav-link" href="#students" onclick="showSection('students')">
                                 <i class="fas fa-user-graduate"></i> Students
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#classes">
+                            <a class="nav-link" href="#classes" onclick="showSection('classes')">
                                 <i class="fas fa-school"></i> Classes
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#courses">
+                            <a class="nav-link" href="#courses" onclick="showSection('courses')">
                                 <i class="fas fa-book"></i> Courses
                             </a>
                         </li>
@@ -70,102 +72,206 @@
 
             <!-- Main content -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Admin Dashboard</h1>
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <div class="btn-group me-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                <!-- Dashboard Section -->
+                <section id="dashboard-section">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Admin Dashboard</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <div class="btn-group me-2">
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <?php
-                if (isset($_SESSION['error'])) {
-                    echo '<div class="alert alert-danger alert-dismissible fade show" role="alert" id="errorAlert">';
-                    echo htmlspecialchars($_SESSION['error']);
-                    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
-                    echo '</div>';
-                    echo '<script>
-                            setTimeout(function() {
-                                document.getElementById("errorAlert").remove();
-                            }, 2000);
-                          </script>';
-                    unset($_SESSION['error']);
-                }
+                    <?php
+                    if (isset($_SESSION['error'])) {
+                        echo '<div class="alert alert-danger alert-dismissible fade show" role="alert" id="errorAlert">';
+                        echo htmlspecialchars($_SESSION['error']);
+                        echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+                        echo '</div>';
+                        echo '<script>
+                                setTimeout(function() {
+                                    document.getElementById("errorAlert").remove();
+                                }, 2000);
+                              </script>';
+                        unset($_SESSION['error']);
+                    }
 
-                if (isset($_SESSION['success'])) {
-                    echo '<div class="alert alert-success alert-dismissible fade show" role="alert" id="successAlert">';
-                    echo htmlspecialchars($_SESSION['success']);
-                    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
-                    echo '</div>';
-                    echo '<script>
-                            setTimeout(function() {
-                                document.getElementById("successAlert").remove();
-                            }, 2000);
-                          </script>';
-                    unset($_SESSION['success']);
-                }
-                ?>
+                    if (isset($_SESSION['success'])) {
+                        echo '<div class="alert alert-success alert-dismissible fade show" role="alert" id="successAlert">';
+                        echo htmlspecialchars($_SESSION['success']);
+                        echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+                        echo '</div>';
+                        echo '<script>
+                                setTimeout(function() {
+                                    document.getElementById("successAlert").remove();
+                                }, 2000);
+                              </script>';
+                        unset($_SESSION['success']);
+                    }
+                    ?>
 
-                <!-- Statistics Cards -->
-                <div class="row mb-4">
-                    <div class="col-md-3 mb-4">
-                        <div class="card bg-primary text-white h-100">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="text-uppercase">Total Students</h6>
-                                        <h2 class="mb-0">450</h2>
+                    <!-- Statistics Cards -->
+                    <div class="row mb-4">
+                        <div class="col-md-3 mb-4">
+                            <div class="card bg-primary text-white h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="text-uppercase">Total Students</h6>
+                                            <?php
+                                            $query = "SELECT COUNT(*) as count FROM students";
+                                            $result = mysqli_query($conn, $query);
+                                            $row = mysqli_fetch_assoc($result);
+                                            ?>
+                                            <h2 class="mb-0"><?php echo $row['count']; ?></h2>
+                                        </div>
+                                        <i class="fas fa-user-graduate fa-2x opacity-75"></i>
                                     </div>
-                                    <i class="fas fa-user-graduate fa-2x opacity-75"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="card bg-success text-white h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="text-uppercase">Total Teachers</h6>
+                                            <?php
+                                            $query = "SELECT COUNT(*) as count FROM teachers";
+                                            $result = mysqli_query($conn, $query);
+                                            $row = mysqli_fetch_assoc($result);
+                                            ?>
+                                            <h2 class="mb-0"><?php echo $row['count']; ?></h2>
+                                        </div>
+                                        <i class="fas fa-chalkboard-teacher fa-2x opacity-75"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="card bg-warning text-white h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="text-uppercase">Total Classes</h6>
+                                            <?php
+                                            $query = "SELECT COUNT(*) as count FROM classes";
+                                            $result = mysqli_query($conn, $query);
+                                            $row = mysqli_fetch_assoc($result);
+                                            ?>
+                                            <h2 class="mb-0"><?php echo $row['count']; ?></h2>
+                                        </div>
+                                        <i class="fas fa-school fa-2x opacity-75"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="card bg-info text-white h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="text-uppercase">Total Courses</h6>
+                                            <h2 class="mb-0">
+                                                <?php
+                                                $query = "SELECT COUNT(*) as count FROM courses";
+                                                $result = mysqli_query($conn, $query);
+                                                $row = mysqli_fetch_assoc($result);
+                                                echo $row['count'];
+                                                ?>
+                                            </h2>
+                                        </div>
+                                        <i class="fas fa-book fa-2x opacity-75"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-4">
-                        <div class="card bg-success text-white h-100">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="text-uppercase">Total Teachers</h6>
-                                        <h2 class="mb-0">32</h2>
-                                    </div>
-                                    <i class="fas fa-chalkboard-teacher fa-2x opacity-75"></i>
-                                </div>
-                            </div>
-                        </div>
+                </section>
+
+                <!-- Teachers Section -->
+                <section id="teachers-section" style="display: none;">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Manage Teachers</h1>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTeacherModal">
+                            <i class="fas fa-plus"></i> Add New Teacher
+                        </button>
                     </div>
-                    <div class="col-md-3 mb-4">
-                        <div class="card bg-warning text-white h-100">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="text-uppercase">Total Classes</h6>
-                                        <h2 class="mb-0">12</h2>
-                                    </div>
-                                    <i class="fas fa-school fa-2x opacity-75"></i>
-                                </div>
-                            </div>
-                        </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="teachersTable">
+                            <thead>
+                                <tr>
+                                    <th>Teacher ID</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Class Teacher</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $query = "SELECT * FROM teachers";
+                                $result = mysqli_query($conn, $query);
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    echo "<tr>";
+                                    echo "<td>" . htmlspecialchars($row['teacher_id']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['first_name']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['last_name']) . "</td>";
+                                    echo "<td>" . ($row['is_class_teacher'] ? 'Yes' : 'No') . "</td>";
+                                    echo "<td>
+                                            <button class='btn btn-sm btn-primary' onclick='editTeacher(\"" . $row['teacher_id'] . "\")'><i class='fas fa-edit'></i></button>
+                                            <button class='btn btn-sm btn-danger' onclick='deleteTeacher(\"" . $row['teacher_id'] . "\")'><i class='fas fa-trash'></i></button>
+                                          </td>";
+                                    echo "</tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="col-md-3 mb-4">
-                        <div class="card bg-info text-white h-100">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="text-uppercase">Total Courses</h6>
-                                        <h2 class="mb-0">15</h2>
+                </section>
+
+                <!-- Add Teacher Modal -->
+                <div class="modal fade" id="addTeacherModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Add New Teacher</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addTeacherForm" action="../actions/add_teacher.php" method="post">
+                                    <div class="mb-3">
+                                        <label for="teacherId" class="form-label">Teacher ID</label>
+                                        <input type="text" class="form-control" id="teacherId" name="teacher_id" required>
                                     </div>
-                                    <i class="fas fa-book fa-2x opacity-75"></i>
-                                </div>
+                                    <div class="mb-3">
+                                        <label for="firstName" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="firstName" name="first_name" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="lastName" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="lastName" name="last_name" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="isClassTeacher" name="is_class_teacher">
+                                            <label class="form-check-label" for="isClassTeacher">
+                                                Is Class Teacher
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Add Teacher</button>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Student Registration Form -->
-                <div class="card mb-4">
+                <div class="card mb-4" id="student-registration-section" style="display: none;">
                     <div class="card-header">
                         <h5 class="card-title mb-0">Register New Student</h5>
                     </div>
@@ -175,66 +281,79 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="studentId" class="form-label">Student ID</label>
                                     <input type="text" class="form-control" id="studentId" name="student_id" required>
-                                    <span class="text-danger" id="studentIdError" style="display: none;">Please enter a valid student ID (format: STU-XXX)</span>
                                 </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="admissionDate" class="form-label">Admission Date</label>
+                                    <input type="date" class="form-control" id="admissionDate" name="admission_date" required>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="firstName" class="form-label">First Name</label>
-                                    <input type="text" class="form-control" id="firstName" name="firstname" required>
-                                    <span class="text-danger" id="firstNameError" style="display: none;">Please enter a valid first name</span>
+                                    <input type="text" class="form-control" id="firstName" name="first_name" required>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="lastName" class="form-label">Last Name</label>
-                                    <input type="text" class="form-control" id="lastName" name="lastname" required>
-                                    <span class="text-danger" id="lastNameError" style="display: none;">Please enter a valid last name</span>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="dob" class="form-label">Date of Birth</label>
-                                    <input type="date" class="form-control" id="dob" name="date_of_birth" required>
-                                    <span class="text-danger" id="dobError" style="display: none;">Please enter a valid date of birth (age must be between 10-20 years)</span>
+                                    <input type="text" class="form-control" id="lastName" name="last_name" required>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="gender" class="form-label">Gender</label>
-                                    <select class="form-control" id="gender" name="gender" required>
-                                        <option value="">Select Gender</option>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                    <span class="text-danger" id="genderError" style="display: none;">Please select a gender</span>
+                                    <label for="dateOfBirth" class="form-label">Date of Birth</label>
+                                    <input type="date" class="form-control" id="dateOfBirth" name="date_of_birth" required>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Class</label>
-                                    <div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="class" id="jss1" value="jss1" required>
-                                            <label class="form-check-label" for="jss1">JSS 1</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="class" id="jss2" value="jss2" required>
-                                            <label class="form-check-label" for="jss2">JSS 2</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="class" id="jss3" value="jss3" required>
-                                            <label class="form-check-label" for="jss3">JSS 3</label>
-                                        </div>
-                                    </div>
-                                    <span class="text-danger" id="classError" style="display: none;">Please select a class</span>
+                                    <label for="gender" class="form-label">Gender</label>
+                                    <select class="form-select" id="gender" name="gender" required>
+                                        <option value="">Choose...</option>
+                                        <option value="M">Male</option>
+                                        <option value="F">Female</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="class" class="form-label">Class</label>
+                                    <select class="form-select" id="class" name="class" required>
+                                        <option value="">Choose...</option>
+                                        <?php
+                                        $query = "SELECT * FROM classes";
+                                        $result = mysqli_query($conn, $query);
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<option value='" . $row['class_id'] . "'>" . htmlspecialchars($row['class_name']) . "</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="section" class="form-label">Section</label>
+                                    <select class="form-select" id="section" name="section" required>
+                                        <option value="">Choose...</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label for="enrollmentDate" class="form-label">Enrollment Date</label>
-                                <input type="date" class="form-control" id="enrollmentDate" name="enrollment_date" required>
-                                <span class="text-danger" id="enrollmentDateError" style="display: none;">Please enter a valid enrollment date</span>
+                                <label for="address" class="form-label">Address</label>
+                                <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
                             </div>
-                            <div class="text-end">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-user-plus me-2"></i>Register Student
-                                </button>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="phoneNumber" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phoneNumber" name="phone_number" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
                             </div>
+                            <div class="mb-3">
+                                <label for="parentName" class="form-label">Parent/Guardian Name</label>
+                                <input type="text" class="form-control" id="parentName" name="parent_name" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Register Student</button>
                         </form>
                     </div>
                 </div>
@@ -243,7 +362,43 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script src="../assets/js/admin-dashboard.js"></script>
+    <script>
+        function showSection(sectionName) {
+            // Hide all sections
+            document.getElementById('dashboard-section').style.display = 'none';
+            document.getElementById('teachers-section').style.display = 'none';
+            document.getElementById('student-registration-section').style.display = 'none';
+
+            // Show selected section
+            if (sectionName === 'teachers') {
+                document.getElementById('teachers-section').style.display = 'block';
+            } else if (sectionName === 'dashboard') {
+                document.getElementById('dashboard-section').style.display = 'block';
+            } else if (sectionName === 'students') {
+                document.getElementById('student-registration-section').style.display = 'block';
+            }
+        }
+
+        // Initialize DataTables
+        $(document).ready(function() {
+            $('#teachersTable').DataTable();
+        });
+
+        function editTeacher(teacherId) {
+            // Implement edit functionality
+            console.log('Edit teacher:', teacherId);
+        }
+
+        function deleteTeacher(teacherId) {
+            if (confirm('Are you sure you want to delete this teacher?')) {
+                // Implement delete functionality
+                console.log('Delete teacher:', teacherId);
+            }
+        }
+    </script>
 </body>
 
 </html>
