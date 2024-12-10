@@ -321,8 +321,9 @@
                                     <label for="gender" class="form-label">Gender</label>
                                     <select class="form-select" id="gender" name="gender" required>
                                         <option value="">Choose...</option>
-                                        <option value="M">Male</option>
-                                        <option value="F">Female</option>
+                                        <option value="male">male</option>
+                                        <option value="female">female</option>
+                                        <option value="other">other</option>
                                     </select>
                                     <div class="text-danger invalid-feedback" id="genderError" style="display: none;">
                                         Please select a gender
