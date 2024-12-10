@@ -75,6 +75,19 @@ if (isset($_POST['parentName']) && isset($_POST['email']) && isset($_POST['passw
             exit();
         }
 
+        // Check if ward ID already has a parent assigned
+        $checkWardParentStmt = $conn->prepare("SELECT p.full_name FROM parents p WHERE p.ward_id = ?");
+        $checkWardParentStmt->bind_param("s", $wardId);
+        $checkWardParentStmt->execute();
+        $wardParentResult = $checkWardParentStmt->get_result();
+
+        if ($wardParentResult->num_rows > 0) {
+            $parentInfo = $wardParentResult->fetch_assoc();
+            $_SESSION['error'] = "Student ID " . htmlspecialchars($wardId) . " already has a parent (" . htmlspecialchars($parentInfo['full_name']) . ") assigned.";
+            header("Location: ../view/parent-registration.php");
+            exit();
+        }
+
         // Insert into users table
         $stmt = $conn->prepare("INSERT INTO users (user_id, email, password, user_type, created_at) VALUES (?, ?, ?, 'parent', NOW())");
         $stmt->bind_param("sss", $parentId, $email, $password);
