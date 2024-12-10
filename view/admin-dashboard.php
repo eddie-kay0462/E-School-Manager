@@ -64,16 +64,6 @@
                                 <i class="fas fa-book"></i> Courses
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#reports">
-                                <i class="fas fa-chart-bar"></i> Reports
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#settings">
-                                <i class="fas fa-cog"></i> Settings
-                            </a>
-                        </li>
                     </ul>
                 </div>
             </nav>
@@ -92,18 +82,28 @@
 
                 <?php
                 if (isset($_SESSION['error'])) {
-                    echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">';
+                    echo '<div class="alert alert-danger alert-dismissible fade show" role="alert" id="errorAlert">';
                     echo htmlspecialchars($_SESSION['error']);
                     echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
                     echo '</div>';
+                    echo '<script>
+                            setTimeout(function() {
+                                document.getElementById("errorAlert").remove();
+                            }, 2000);
+                          </script>';
                     unset($_SESSION['error']);
                 }
 
                 if (isset($_SESSION['success'])) {
-                    echo '<div class="alert alert-success alert-dismissible fade show" role="alert">';
+                    echo '<div class="alert alert-success alert-dismissible fade show" role="alert" id="successAlert">';
                     echo htmlspecialchars($_SESSION['success']);
                     echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
                     echo '</div>';
+                    echo '<script>
+                            setTimeout(function() {
+                                document.getElementById("successAlert").remove();
+                            }, 2000);
+                          </script>';
                     unset($_SESSION['success']);
                 }
                 ?>
