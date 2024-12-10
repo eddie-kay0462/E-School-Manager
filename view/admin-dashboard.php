@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/admin-dashboard.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css"> -->
 </head>
 
 <body>
@@ -249,11 +249,11 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="firstName" class="form-label">First Name</label>
-                                        <input type="text" class="form-control" id="firstName" name="first_name" required>
+                                        <input type="text" class="form-control" id="teacherFirstName" name="first_name" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="lastName" class="form-label">Last Name</label>
-                                        <input type="text" class="form-control" id="lastName" name="last_name" required>
+                                        <input type="text" class="form-control" id="teacherLastName" name="last_name" required>
                                     </div>
                                     <div class="mb-3">
                                         <div class="form-check">
@@ -281,26 +281,41 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="studentId" class="form-label">Student ID</label>
                                     <input type="text" class="form-control" id="studentId" name="student_id" required>
+                                    <div class="text-danger invalid-feedback" id="studentIdError">
+                                        Please enter a valid student ID (alphanumeric characters only)
+                                    </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="admissionDate" class="form-label">Admission Date</label>
-                                    <input type="date" class="form-control" id="admissionDate" name="admission_date" required>
+                                    <label for="admissionDate" class="form-label">Enrolment Date</label>
+                                    <input type="date" class="form-control" id="enrollmentDate" name="enrollment_date" required>
+                                    <div class="text-danger invalid-feedback" id="enrollmentDateError">
+                                        Please select a valid enrolment date
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="firstName" class="form-label">First Name</label>
                                     <input type="text" class="form-control" id="firstName" name="first_name" required>
+                                    <div class="text-danger invalid-feedback" id="firstNameError" style="display: none;">
+                                        Please enter a valid first name (letters only)
+                                    </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="lastName" class="form-label">Last Name</label>
                                     <input type="text" class="form-control" id="lastName" name="last_name" required>
+                                    <div class="text-danger invalid-feedback" id="lastNameError" style="display: none;">
+                                        Please enter a valid last name (letters only)
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="dateOfBirth" class="form-label">Date of Birth</label>
-                                    <input type="date" class="form-control" id="dateOfBirth" name="date_of_birth" required>
+                                    <input type="date" class="form-control" id="dob" name="dob" required>
+                                    <div class="text-danger invalid-feedback" id="dobError" style="display: none;">
+                                        Please select a valid date of birth (must be between 10-28 years old)
+                                    </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="gender" class="form-label">Gender</label>
@@ -309,49 +324,30 @@
                                         <option value="M">Male</option>
                                         <option value="F">Female</option>
                                     </select>
+                                    <div class="text-danger invalid-feedback" id="genderError" style="display: none;">
+                                        Please select a gender
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="class" class="form-label">Class</label>
-                                    <select class="form-select" id="class" name="class" required>
-                                        <option value="">Choose...</option>
+                                    <label class="form-label">Class</label>
+                                    <div class="mt-2">
                                         <?php
                                         $query = "SELECT * FROM classes";
                                         $result = mysqli_query($conn, $query);
                                         while ($row = mysqli_fetch_assoc($result)) {
-                                            echo "<option value='" . $row['class_id'] . "'>" . htmlspecialchars($row['class_name']) . "</option>";
+                                            echo "<div class='form-check'>";
+                                            echo "<input class='form-check-input' type='radio' name='class' id='class" . $row['class_id'] . "' value='" . $row['class_id'] . "' required>";
+                                            echo "<label class='form-check-label' for='class" . $row['class_id'] . "' >" . htmlspecialchars($row['class_name']) . "</label>";
+                                            echo "</div>";
                                         }
                                         ?>
-                                    </select>
+                                    </div>
+                                    <div class="text-danger invalid-feedback" id="classError" style="display: none;">
+                                        Please select a class
+                                    </div>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="section" class="form-label">Section</label>
-                                    <select class="form-select" id="section" name="section" required>
-                                        <option value="">Choose...</option>
-                                        <option value="A">A</option>
-                                        <option value="B">B</option>
-                                        <option value="C">C</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="address" class="form-label">Address</label>
-                                <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="phoneNumber" class="form-label">Phone Number</label>
-                                    <input type="tel" class="form-control" id="phoneNumber" name="phone_number" required>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="parentName" class="form-label">Parent/Guardian Name</label>
-                                <input type="text" class="form-control" id="parentName" name="parent_name" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Register Student</button>
                         </form>
@@ -362,8 +358,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script src="../assets/js/admin-dashboard.js"></script>
     <script>
         function showSection(sectionName) {
