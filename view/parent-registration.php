@@ -38,23 +38,33 @@
 
     <div class="container py-5">
         <?php if(isset($_SESSION['error'])): ?>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" id="errorAlert">
                 <?php 
                 echo $_SESSION['error'];
                 unset($_SESSION['error']);
                 ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
+            <script>
+                setTimeout(function() {
+                    document.getElementById('errorAlert').remove();
+                }, 2000);
+            </script>
         <?php endif; ?>
 
         <?php if(isset($_SESSION['success'])): ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <div class="alert alert-success alert-dismissible fade show" role="alert" id="successAlert">
                 <?php 
                 echo $_SESSION['success'];
                 unset($_SESSION['success']);
                 ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
+            <script>
+                setTimeout(function() {
+                    document.getElementById('successAlert').remove();
+                }, 2000);
+            </script>
         <?php endif; ?>
 
         <div class="row justify-content-center">
