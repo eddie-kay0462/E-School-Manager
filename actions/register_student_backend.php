@@ -5,11 +5,11 @@ include '../db/config2.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form data
     $student_id = $_POST['student_id'];
-    $firstname = $_POST['firstname'];
-    $lastname = $_POST['lastname'];
-    $date_of_birth = $_POST['date_of_birth'];
+    $firstname = $_POST['first_name'];
+    $lastname = $_POST['last_name'];
+    $date_of_birth = $_POST['dob'];
     $gender = $_POST['gender'];
-    $class_name = $_POST['class']; // Get class name from form
+    $class_id = $_POST['class']; // Get class name from form
     $enrollment_date = $_POST['enrollment_date'];
 
     try {
@@ -28,8 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Get class_id from class name
-        $stmt = $conn->prepare("SELECT class_id FROM classes WHERE class_name = ?");
-        $stmt->bind_param("s", $class_name);
+        $stmt = $conn->prepare("SELECT class_id FROM classes WHERE class_id = ?");
+        $stmt->bind_param("s", $class_id);
         $stmt->execute();
         $result = $stmt->get_result();
         $class_result = $result->fetch_assoc();
