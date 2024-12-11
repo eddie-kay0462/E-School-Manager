@@ -148,10 +148,8 @@ document.querySelectorAll('input[name="class"]').forEach(radio => {
 });
 
 // Validate teacher ID selection
-document.querySelectorAll('input[name="teacher_id"]').forEach(radio => {
-    radio.addEventListener('change', function() {
-        document.getElementById('teacherIdError').style.display = 'none';
-    });
+document.getElementById('teacher_id').addEventListener('change', function() {
+    document.getElementById('teacherIdError').style.display = this.value ? 'none' : 'block';
 });
 
 // Form submission
@@ -168,7 +166,7 @@ document.getElementById('teacherRegistration').addEventListener('submit', functi
     const teachingClassesChecked = Array.from(document.querySelectorAll('input[name="teaching_classes[]"]')).some(cb => cb.checked);
     const isClassTeacher = document.getElementById('classTeacherCheck').checked;
     const classSelected = isClassTeacher ? document.querySelector('input[name="class"]:checked') : true;
-    const teacherId = document.querySelector('input[name="teacher_id"]:checked');
+    const teacherId = document.getElementById('teacher_id').value;
 
     // Show any validation errors
     showAllErrors();
