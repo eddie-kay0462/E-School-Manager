@@ -61,27 +61,16 @@
                         ?>
                         <form id="teacherRegistration" method="POST" action="../actions/register_teacher.php">
                             <div class="mb-3">
-                                <label class="form-label">Select Teacher ID</label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="teacher_id" value="TEACH-001" id="teach001" required>
-                                    <label class="form-check-label" for="teach001">TEACH-001</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="teacher_id" value="TEACH-002" id="teach002">
-                                    <label class="form-check-label" for="teach002">TEACH-002</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="teacher_id" value="TEACH-003" id="teach003">
-                                    <label class="form-check-label" for="teach003">TEACH-003</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="teacher_id" value="TEACH-004" id="teach004">
-                                    <label class="form-check-label" for="teach004">TEACH-004</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="teacher_id" value="TEACH-005" id="teach005">
-                                    <label class="form-check-label" for="teach005">TEACH-005</label>
-                                </div>
+                                <label for="teacher_id" class="form-label">Select Teacher ID</label>
+                                <select class="form-select" id="teacher_id" name="teacher_id" required>
+                                    <option value="">Choose Teacher ID...</option>
+                                    <?php
+                                    for ($i = 1; $i <= 25; $i++) {
+                                        $id = str_pad($i, 3, '0', STR_PAD_LEFT);
+                                        echo "<option value='TEACH-{$id}'>TEACH-{$id}</option>";
+                                    }
+                                    ?>
+                                </select>
                                 <span class="text-danger" id="teacherIdError" style="display: none;">Please select a Teacher ID</span>
                             </div>
 
@@ -153,6 +142,18 @@
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" name="courses[]" value="french" id="frenchCheck">
                                             <label class="form-check-label" for="frenchCheck">French</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="courses[]" value="computing" id="computingCheck">
+                                            <label class="form-check-label" for="computingCheck">Computing</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="courses[]" value="ga" id="gaCheck">
+                                            <label class="form-check-label" for="gaCheck">GA</label>
                                         </div>
                                     </div>
                                 </div>
