@@ -54,7 +54,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top">
         <div class="container">
             <a class="navbar-brand" href="#">Josephus Memorial School</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -84,7 +84,7 @@
 
     <section class="hero d-flex align-items-center justify-content-center text-white text-center">
         <div class="container">
-            <h1 class="display-4 mb-3">Welcome to Josephus Memorial School</h1>
+            <h1 class="display-4 mb-3">Welcome to Josephus Memorial School </h1>
             <p class="lead">Streamlined Student Management & Academic Progress Tracking</p>
         </div>
     </section>
