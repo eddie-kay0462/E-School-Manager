@@ -280,6 +280,50 @@
                     </div>
                 </section>
 
+                <!-- Students Section -->
+                <section id="student-registration-section" style="display: none;">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Manage Students</h1>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">
+                            <i class="fas fa-plus"></i> Add New Student
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Student Name</th>
+                                    <th>Class</th>
+                                    <th>Enrollment Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $query = "SELECT s.*, c.class_name, CONCAT(s.first_name, ' ', s.last_name) as student_name 
+                                         FROM students s 
+                                         LEFT JOIN classes c ON s.class_id = c.class_id";
+                                $result = mysqli_query($conn, $query);
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    echo "<tr>";
+                                    echo "<td>" . htmlspecialchars($row['student_id']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['student_name']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['class_name']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['enrollment_date']) . "</td>";
+                                    echo "<td>
+                                            <button class='btn btn-sm btn-primary'><i class='fas fa-edit'></i></button>
+                                            <button class='btn btn-sm btn-danger'><i class='fas fa-trash'></i></button>
+                                          </td>";
+                                    echo "</tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
                 <!-- Add Teacher Modal -->
                 <div class="modal fade" id="addTeacherModal" tabindex="-1">
                     <div class="modal-dialog">
@@ -317,88 +361,93 @@
                     </div>
                 </div>
 
-                <!-- Student Registration Form -->
-                <div class="card mb-4" id="student-registration-section" style="display: none;">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Register New Student</h5>
-                    </div>
-                    <div class="card-body">
-                        <form id="studentRegistrationForm" action="../actions/register_student_backend.php" method="post">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="studentId" class="form-label">Student ID</label>
-                                    <input type="text" class="form-control" id="studentId" name="student_id" required>
-                                    <div class="text-danger invalid-feedback" id="studentIdError">
-                                        Please enter a valid student ID (alphanumeric characters only)
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="admissionDate" class="form-label">Enrolment Date</label>
-                                    <input type="date" class="form-control" id="enrollmentDate" name="enrollment_date" required>
-                                    <div class="text-danger invalid-feedback" id="enrollmentDateError">
-                                        Please select a valid enrolment date
-                                    </div>
-                                </div>
+                <!-- Add Student Modal -->
+                <div class="modal fade" id="addStudentModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Register New Student</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="firstName" class="form-label">First Name</label>
-                                    <input type="text" class="form-control" id="firstName" name="first_name" required>
-                                    <div class="text-danger invalid-feedback" id="firstNameError" style="display: none;">
-                                        Please enter a valid first name (letters only)
+                            <div class="modal-body">
+                                <form id="studentRegistrationForm" action="../actions/register_student_backend.php" method="post">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="studentId" class="form-label">Student ID</label>
+                                            <input type="text" class="form-control" id="studentId" name="student_id" required>
+                                            <div class="text-danger invalid-feedback" id="studentIdError">
+                                                Please enter a valid student ID (alphanumeric characters only)
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="admissionDate" class="form-label">Enrolment Date</label>
+                                            <input type="date" class="form-control" id="enrollmentDate" name="enrollment_date" required>
+                                            <div class="text-danger invalid-feedback" id="enrollmentDateError">
+                                                Please select a valid enrolment date
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="lastName" class="form-label">Last Name</label>
-                                    <input type="text" class="form-control" id="lastName" name="last_name" required>
-                                    <div class="text-danger invalid-feedback" id="lastNameError" style="display: none;">
-                                        Please enter a valid last name (letters only)
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="firstName" class="form-label">First Name</label>
+                                            <input type="text" class="form-control" id="firstName" name="first_name" required>
+                                            <div class="text-danger invalid-feedback" id="firstNameError" style="display: none;">
+                                                Please enter a valid first name (letters only)
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="lastName" class="form-label">Last Name</label>
+                                            <input type="text" class="form-control" id="lastName" name="last_name" required>
+                                            <div class="text-danger invalid-feedback" id="lastNameError" style="display: none;">
+                                                Please enter a valid last name (letters only)
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="dateOfBirth" class="form-label">Date of Birth</label>
+                                            <input type="date" class="form-control" id="dob" name="dob" required>
+                                            <div class="text-danger invalid-feedback" id="dobError" style="display: none;">
+                                                Please select a valid date of birth (must be between 10-28 years old)
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="gender" class="form-label">Gender</label>
+                                            <select class="form-select" id="gender" name="gender" required>
+                                                <option value="">Choose...</option>
+                                                <option value="male">male</option>
+                                                <option value="female">female</option>
+                                                <option value="other">other</option>
+                                            </select>
+                                            <div class="text-danger invalid-feedback" id="genderError" style="display: none;">
+                                                Please select a gender
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Class</label>
+                                            <div class="mt-2">
+                                                <?php
+                                                $query = "SELECT * FROM classes";
+                                                $result = mysqli_query($conn, $query);
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    echo "<div class='form-check'>";
+                                                    echo "<input class='form-check-input' type='radio' name='class' id='class" . $row['class_id'] . "' value='" . $row['class_id'] . "' required>";
+                                                    echo "<label class='form-check-label' for='class" . $row['class_id'] . "' >" . htmlspecialchars($row['class_name']) . "</label>";
+                                                    echo "</div>";
+                                                }
+                                                ?>
+                                            </div>
+                                            <div class="text-danger invalid-feedback" id="classError" style="display: none;">
+                                                Please select a class
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Register Student</button>
+                                </form>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="dateOfBirth" class="form-label">Date of Birth</label>
-                                    <input type="date" class="form-control" id="dob" name="dob" required>
-                                    <div class="text-danger invalid-feedback" id="dobError" style="display: none;">
-                                        Please select a valid date of birth (must be between 10-28 years old)
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="gender" class="form-label">Gender</label>
-                                    <select class="form-select" id="gender" name="gender" required>
-                                        <option value="">Choose...</option>
-                                        <option value="male">male</option>
-                                        <option value="female">female</option>
-                                        <option value="other">other</option>
-                                    </select>
-                                    <div class="text-danger invalid-feedback" id="genderError" style="display: none;">
-                                        Please select a gender
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Class</label>
-                                    <div class="mt-2">
-                                        <?php
-                                        $query = "SELECT * FROM classes";
-                                        $result = mysqli_query($conn, $query);
-                                        while ($row = mysqli_fetch_assoc($result)) {
-                                            echo "<div class='form-check'>";
-                                            echo "<input class='form-check-input' type='radio' name='class' id='class" . $row['class_id'] . "' value='" . $row['class_id'] . "' required>";
-                                            echo "<label class='form-check-label' for='class" . $row['class_id'] . "' >" . htmlspecialchars($row['class_name']) . "</label>";
-                                            echo "</div>";
-                                        }
-                                        ?>
-                                    </div>
-                                    <div class="text-danger invalid-feedback" id="classError" style="display: none;">
-                                        Please select a class
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Register Student</button>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </main>
