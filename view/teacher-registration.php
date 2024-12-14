@@ -11,8 +11,8 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class=" container">
             <a class="navbar-brand" href="#">Josephus Memorial School</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -31,6 +31,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Contact</a>
                     </li>
+
                 </ul>
             </div>
         </div>
