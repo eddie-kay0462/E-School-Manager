@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,11 +8,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/parent-registration.css">
 </head>
+
 <body class="bg-light">
     <?php
     session_start();
     ?>
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-green);">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background-color: var(--primary-green);">
         <div class="container">
             <a class="navbar-brand" href="#">Josephus Memorial School</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -37,9 +39,9 @@
     </nav>
 
     <div class="container py-5">
-        <?php if(isset($_SESSION['error'])): ?>
+        <?php if (isset($_SESSION['error'])): ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert" id="errorAlert">
-                <?php 
+                <?php
                 echo $_SESSION['error'];
                 unset($_SESSION['error']);
                 ?>
@@ -52,9 +54,9 @@
             </script>
         <?php endif; ?>
 
-        <?php if(isset($_SESSION['success'])): ?>
+        <?php if (isset($_SESSION['success'])): ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert" id="successAlert">
-                <?php 
+                <?php
                 echo $_SESSION['success'];
                 unset($_SESSION['success']);
                 ?>
@@ -136,4 +138,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/parent-registration.js"></script>
 </body>
+
 </html>
