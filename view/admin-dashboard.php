@@ -70,6 +70,9 @@
                 </div>
             </nav>
 
+            <label for="">
+
+            </label>
             <!-- Main content -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <!-- Dashboard Section -->
@@ -233,6 +236,50 @@
                     </div>
                 </section>
 
+                <!-- Classes Section -->
+                <section id="classes-section" style="display: none;">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Manage Classes</h1>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addClassModal">
+                            <i class="fas fa-plus"></i> Add New Class
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="classesTable">
+                            <thead>
+                                <tr>
+                                    <th>Class ID</th>
+                                    <th>Class Name</th>
+                                    <th>Class Teacher Name</th>
+                                    <th>Class Teacher ID</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $query = "SELECT c.*, CONCAT(t.first_name, ' ', t.last_name) as teacher_name 
+                                         FROM classes c 
+                                         LEFT JOIN teachers t ON c.class_teacher_id = t.teacher_id";
+                                $result = mysqli_query($conn, $query);
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    echo "<tr>";
+                                    echo "<td>" . htmlspecialchars($row['class_id']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['class_name']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['teacher_name']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['class_teacher_id']) . "</td>";
+                                    echo "<td>
+                                            <button class='btn btn-sm btn-primary' onclick='editClass(\"" . $row['class_id'] . "\")'><i class='fas fa-edit'></i></button>
+                                            <button class='btn btn-sm btn-danger' onclick='deleteClass(\"" . $row['class_id'] . "\")'><i class='fas fa-trash'></i></button>
+                                          </td>";
+                                    echo "</tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
                 <!-- Add Teacher Modal -->
                 <div class="modal fade" id="addTeacherModal" tabindex="-1">
                     <div class="modal-dialog">
@@ -366,6 +413,7 @@
             document.getElementById('dashboard-section').style.display = 'none';
             document.getElementById('teachers-section').style.display = 'none';
             document.getElementById('student-registration-section').style.display = 'none';
+            document.getElementById('classes-section').style.display = 'none';
 
             // Show selected section
             if (sectionName === 'teachers') {
@@ -374,12 +422,15 @@
                 document.getElementById('dashboard-section').style.display = 'block';
             } else if (sectionName === 'students') {
                 document.getElementById('student-registration-section').style.display = 'block';
+            } else if (sectionName === 'classes') {
+                document.getElementById('classes-section').style.display = 'block';
             }
         }
 
         // Initialize DataTables
         $(document).ready(function() {
             $('#teachersTable').DataTable();
+            $('#classesTable').DataTable();
         });
 
         function editTeacher(teacherId) {
@@ -392,6 +443,22 @@
                 // Implement delete functionality
                 console.log('Delete teacher:', teacherId);
             }
+        }
+
+        function editClass(classId) {
+            // Implement edit functionality
+            console.log('Edit class:', classId);
+        }
+
+        function deleteClass(classId) {
+            if (confirm('Are you sure you want to delete this class?')) {
+                // Implement delete functionality
+                console.log('Delete class:', classId);
+            }
+        }
+
+        function updateTeacher(teacherId) {
+
         }
     </script>
 </body>
