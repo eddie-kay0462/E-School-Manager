@@ -13,8 +13,6 @@
             --light-green: #4CAF50;
         }
 
-
-
         .btn-primary {
             background-color: var(--primary-green);
             border-color: var(--primary-green);
@@ -148,11 +146,10 @@
                                 <thead class="table-primary">
                                     <tr>
                                         <th>Student Name</th>
-                                        <th>Assignment (10%)</th>
-                                        <th>Classwork (10%)</th>
-                                        <th>Homework (10%)</th>
-                                        <th>Midterm (10%)</th>
-                                        <th>Final (10%)</th>
+                                        <th>Assignment (20%)</th>
+                                        <th>Classwork (20%)</th>
+                                        <th>Midterm (20%)</th>
+                                        <th>Final (40%)</th>
                                         <th>Overall (100%)</th>
                                         <th>Actions</th>
                                     </tr>
@@ -162,7 +159,6 @@
                                         <td>John Doe</td>
                                         <td><input type="number" class="form-control grade-input" value="85" min="0" max="100"></td>
                                         <td><input type="number" class="form-control grade-input" value="90" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="88" min="0" max="100"></td>
                                         <td><input type="number" class="form-control grade-input" value="92" min="0" max="100"></td>
                                         <td><input type="number" class="form-control grade-input" value="95" min="0" max="100"></td>
                                         <td>90</td>
@@ -186,24 +182,22 @@
                                 <thead class="table-primary">
                                     <tr>
                                         <th>Student Name</th>
-                                        <th>Assignment (10%)</th>
-                                        <th>Classwork (10%)</th>
-                                        <th>Homework (10%)</th>
-                                        <th>Midterm (10%)</th>
-                                        <th>Final (10%)</th>
+                                        <th>Assignment (20%)</th>
+                                        <th>Classwork (20%)</th>
+                                        <th>Midterm (20%)</th>
+                                        <th>Final (40%)</th>
                                         <th>Overall (100%)</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>Jane Smith</td>
-                                        <td><input type="number" class="form-control grade-input" value="92" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="88" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="95" min="0" max="100"></td>
+                                        <td>John Doe</td>
+                                        <td><input type="number" class="form-control grade-input" value="85" min="0" max="100"></td>
                                         <td><input type="number" class="form-control grade-input" value="90" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="93" min="0" max="100"></td>
-                                        <td>92</td>
+                                        <td><input type="number" class="form-control grade-input" value="92" min="0" max="100"></td>
+                                        <td><input type="number" class="form-control grade-input" value="95" min="0" max="100"></td>
+                                        <td>90</td>
                                         <td>
                                             <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
                                             <button class="btn btn-warning btn-sm" onclick="updateGrades(this)">Update</button>
@@ -224,11 +218,10 @@
                                 <thead class="table-primary">
                                     <tr>
                                         <th>Student Name</th>
-                                        <th>Assignment (10%)</th>
-                                        <th>Classwork (10%)</th>
-                                        <th>Homework (10%)</th>
-                                        <th>Midterm (10%)</th>
-                                        <th>Final (10%)</th>
+                                        <th>Assignment (20%)</th>
+                                        <th>Classwork (20%)</th>
+                                        <th>Midterm (20%)</th>
+                                        <th>Final (40%)</th>
                                         <th>Overall (100%)</th>
                                         <th>Actions</th>
                                     </tr>
@@ -238,7 +231,6 @@
                                         <td>Michael Johnson</td>
                                         <td><input type="number" class="form-control grade-input" value="88" min="0" max="100"></td>
                                         <td><input type="number" class="form-control grade-input" value="85" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="90" min="0" max="100"></td>
                                         <td><input type="number" class="form-control grade-input" value="87" min="0" max="100"></td>
                                         <td><input type="number" class="form-control grade-input" value="89" min="0" max="100"></td>
                                         <td>88</td>
@@ -262,24 +254,22 @@
                                 <thead class="table-primary">
                                     <tr>
                                         <th>Student Name</th>
-                                        <th>Assignment (10%)</th>
-                                        <th>Classwork (10%)</th>
-                                        <th>Homework (10%)</th>
-                                        <th>Midterm (10%)</th>
-                                        <th>Final (10%)</th>
+                                        <th>Assignment (20%)</th>
+                                        <th>Classwork (20%)</th>
+                                        <th>Midterm (20%)</th>
+                                        <th>Final (40%)</th>
                                         <th>Overall (100%)</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>Sarah Williams</td>
-                                        <td><input type="number" class="form-control grade-input" value="95" min="0" max="100"></td>
+                                        <td>John Doe</td>
+                                        <td><input type="number" class="form-control grade-input" value="85" min="0" max="100"></td>
+                                        <td><input type="number" class="form-control grade-input" value="90" min="0" max="100"></td>
                                         <td><input type="number" class="form-control grade-input" value="92" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="93" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="94" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="96" min="0" max="100"></td>
-                                        <td>94</td>
+                                        <td><input type="number" class="form-control grade-input" value="95" min="0" max="100"></td>
+                                        <td>90</td>
                                         <td>
                                             <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
                                             <button class="btn btn-warning btn-sm" onclick="updateGrades(this)">Update</button>
@@ -300,24 +290,22 @@
                                 <thead class="table-primary">
                                     <tr>
                                         <th>Student Name</th>
-                                        <th>Assignment (10%)</th>
-                                        <th>Classwork (10%)</th>
-                                        <th>Homework (10%)</th>
-                                        <th>Midterm (10%)</th>
-                                        <th>Final (10%)</th>
+                                        <th>Assignment (20%)</th>
+                                        <th>Classwork (20%)</th>
+                                        <th>Midterm (20%)</th>
+                                        <th>Final (40%)</th>
                                         <th>Overall (100%)</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>Emma Davis</td>
-                                        <td><input type="number" class="form-control grade-input" value="91" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="89" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="94" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="88" min="0" max="100"></td>
+                                        <td>John Doe</td>
+                                        <td><input type="number" class="form-control grade-input" value="85" min="0" max="100"></td>
+                                        <td><input type="number" class="form-control grade-input" value="90" min="0" max="100"></td>
                                         <td><input type="number" class="form-control grade-input" value="92" min="0" max="100"></td>
-                                        <td>91</td>
+                                        <td><input type="number" class="form-control grade-input" value="95" min="0" max="100"></td>
+                                        <td>90</td>
                                         <td>
                                             <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
                                             <button class="btn btn-warning btn-sm" onclick="updateGrades(this)">Update</button>
