@@ -56,8 +56,8 @@ function openEditModal(studentId, courseCode, studentName) {
             // alert the studentid in script tag
             console.log('Student ID:', studentId);
             console.log(data);
-            // Populate the form with the fetched grades
-            document.getElementById('assignmentScore').value = data.assignment_score || 0;
+            // Populate the form with the fetched grades or set to 0 if not found
+            document.getElementById('assignmentScore').value = data.assignment_score ?? 0;
             document.getElementById('testScore').value = data.test_score ?? 0;
             document.getElementById('midtermScore').value = data.mid_term_score ?? 0;
             document.getElementById('examScore').value = data.exam_score ?? 0;
