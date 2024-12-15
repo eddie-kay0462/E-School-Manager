@@ -260,6 +260,17 @@ $teacher = $stmt->get_result()->fetch_assoc();
                     </div>
                 </div>
 
+                <!-- Add this new card for Report Cards -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h3>Class Management</h3>
+                        <p>Access student report cards and academic records.</p>
+                        <a href="report-card.php?class_id=<?php echo $teacher_class['class_id']; ?>" class="btn btn-primary">
+                            <i class="fas fa-file-alt me-2"></i>View Report Cards
+                        </a>
+                    </div>
+                </div>
+
                 <div class="card mb-4 d-none" id="courseRecords">
                     <div class="card-body">
                         <h2 id="courseTitle"></h2>
