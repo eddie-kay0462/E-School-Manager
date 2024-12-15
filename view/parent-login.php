@@ -87,8 +87,7 @@
     <script>
         document.getElementById('parentLogin').addEventListener('submit', function(e) {
             e.preventDefault();
-            // Add your login logic here
-            console.log('Login form submitted');
+            this.submit();
         });
     </script>
 </body>
