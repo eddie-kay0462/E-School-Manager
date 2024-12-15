@@ -39,7 +39,8 @@ function openEditModal(studentId, courseCode, studentName) {
     document.getElementById('studentId').value = studentId;
     document.getElementById('courseCode').value = courseCode; // Set courseCode
     // Fetch grades from the server
-    fetch(`../actions/get_grades.php?studentId=${studentId}&courseCode=${courseCode}`)
+    console.log(studentId, courseCode);
+    fetch(`../actions/get_grades.php?student_id=${studentId}&course_code=${courseCode}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -54,6 +55,7 @@ function openEditModal(studentId, courseCode, studentName) {
             }
             // alert the studentid in script tag
             console.log('Student ID:', studentId);
+            console.log(data);
             // Populate the form with the fetched grades
             document.getElementById('assignmentScore').value = data.assignment_score || 0;
             document.getElementById('testScore').value = data.test_score ?? 0;
@@ -91,6 +93,10 @@ document.getElementById('editGradesForm').addEventListener('submit', function(e)
         classId: document.getElementById('classId').value // Include classId
     };
 
+    // Store current active tab info before submitting
+    const activeTab = document.querySelector('.tab-content.active');
+    const activeTabId = activeTab ? activeTab.id : null;
+
     fetch('../actions/save_grades.php', {
         method: 'POST',
         headers: {
@@ -103,7 +109,15 @@ document.getElementById('editGradesForm').addEventListener('submit', function(e)
         if (data.success) {
             alert('Grades saved successfully!');
             closeEditModal();
-            location.reload();
+            
+            // Get current active tab before reload
+            const currentActiveTab = document.querySelector('.tab-content.active').id;
+            
+            // Store active tab in sessionStorage
+            sessionStorage.setItem('activeTab', currentActiveTab);
+            
+            // Reload the page
+            window.location.reload();
         } else {
             alert('Error saving grades: ' + data.message);
         }
@@ -121,19 +135,74 @@ function openAddModal(studentId, courseCode, studentName) {
     // Set student name and ID in the modal
     document.getElementById('studentNameInModal').textContent = studentName;
     document.getElementById('studentId').value = studentId;
-    
-    // Set all scores to 0 for new grade entry
-    document.getElementById('assignmentScore').value = 0;
-    document.getElementById('testScore').value = 0;
-    document.getElementById('midtermScore').value = 0;
-    document.getElementById('examScore').value = 0;
+    document.getElementById('courseCode').value = courseCode;
 
-    // Show the modal
-    modal.style.display = "block";
+    // Get the class ID from the current active tab
+    const activeTab = document.querySelector('.tab-content.active');
+    const classId = activeTab.id.split('-')[1];
+    document.getElementById('classId').value = classId;
+    
+    // First check if grades already exist for this student/course
+    fetch(`../actions/get_grades.php?student_id=${studentId}&course_code=${courseCode}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data && !data.error) {
+                // If grades exist, populate the form with existing values
+                document.getElementById('assignmentScore').value = data.assignment_score || 0;
+                document.getElementById('testScore').value = data.test_score || 0;
+                document.getElementById('midtermScore').value = data.mid_term_score || 0;
+                document.getElementById('examScore').value = data.exam_score || 0;
+            } else {
+                // Set all scores to 0 for new grade entry
+                document.getElementById('assignmentScore').value = 0;
+                document.getElementById('testScore').value = 0;
+                document.getElementById('midtermScore').value = 0;
+                document.getElementById('examScore').value = 0;
+            }
+            
+            // Show the modal
+            modal.style.display = "block";
+        })
+        .catch(error => {
+            console.error('Error fetching grades:', error);
+            // Set default values to 0 in case of error
+            document.getElementById('assignmentScore').value = 0;
+            document.getElementById('testScore').value = 0;
+            document.getElementById('midtermScore').value = 0;
+            document.getElementById('examScore').value = 0;
+            modal.style.display = "block";
+        });
 }
 
-// Show first course tab by default
+// Show first course tab by default or restore previous tab
 document.addEventListener('DOMContentLoaded', () => {
+    // First check sessionStorage for active tab from previous save
+    const savedActiveTab = sessionStorage.getItem('activeTab');
+    if (savedActiveTab) {
+        const activeTab = document.getElementById(savedActiveTab);
+        if (activeTab) {
+            const courseCode = activeTab.id.split('-')[0];
+            showCourseRecords(savedActiveTab, courseCode);
+            // Clear the saved tab after restoring
+            sessionStorage.removeItem('activeTab');
+            return;
+        }
+    }
+
+    // If no saved tab, check URL params
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeTabId = urlParams.get('activeTab');
+
+    if (activeTabId) {
+        const activeTab = document.getElementById(activeTabId);
+        if (activeTab) {
+            const courseCode = activeTab.id.split('-')[0];
+            showCourseRecords(activeTabId, courseCode);
+            return;
+        }
+    }
+
+    // Default behavior if no active tab in storage or URL
     const firstCourse = document.querySelector('.course-item');
     if (firstCourse) {
         const courseName = firstCourse.querySelector('span').textContent;
