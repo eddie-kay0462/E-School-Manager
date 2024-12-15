@@ -202,6 +202,7 @@
                                 <span class="text-danger" id="teachingClassesError" style="display: none;">Please select at least one class</span>
                             </div>
 
+
                             <button type="submit" class="btn btn-primary w-100">Sign Up</button>
                             <div class="text-center mt-3">
                                 <a href="teacher-login.php" class="text-decoration-none text-primary">Already have an account? Login here</a>
