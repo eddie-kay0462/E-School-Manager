@@ -9,6 +9,13 @@ require_once('../db/config2.php');
 // Get teacher ID from session
 $teacher_id = $_SESSION['user_id'];
 
+// Get teacher's class
+$sql = "SELECT class_id, class_name FROM classes WHERE class_teacher_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $teacher_id);
+$stmt->execute();
+$teacher_class = $stmt->get_result()->fetch_assoc();
+
 // Get all courses
 $sql = "SELECT DISTINCT c.course_code, c.course_name,
         CASE WHEN tc.teacher_id = ? THEN 1 ELSE 0 END as is_teacher 
@@ -148,6 +155,7 @@ $teacher = $stmt->get_result()->fetch_assoc();
         .read-only {
             opacity: 0.7;
         }
+
         .read-only .action-icons {
             display: none;
         }
@@ -222,8 +230,8 @@ $teacher = $stmt->get_result()->fetch_assoc();
                 <div>
                     <?php foreach ($courses as $course): ?>
                         <div>
-                            <div class="course-item <?php echo $course['is_teacher'] ? '' : 'read-only'; ?>" 
-                                 onclick="toggleClassLinks('<?php echo htmlspecialchars($course['course_code']); ?>')">
+                            <div class="course-item <?php echo $course['is_teacher'] ? '' : 'read-only'; ?>"
+                                onclick="toggleClassLinks('<?php echo htmlspecialchars($course['course_code']); ?>')">
                                 <i class="fas fa-book"></i>
                                 <span><?php echo htmlspecialchars($course['course_name']); ?></span>
                                 <?php if (!$course['is_teacher']): ?>
@@ -231,9 +239,13 @@ $teacher = $stmt->get_result()->fetch_assoc();
                                 <?php endif; ?>
                             </div>
                             <div class="class-links" id="classes-<?php echo htmlspecialchars($course['course_code']); ?>">
-                                <a href="#" onclick="showCourseRecords('<?php echo htmlspecialchars($course['course_name']); ?>-jss1', '<?php echo htmlspecialchars($course['course_code']); ?>')">JSS 1</a>
-                                <a href="#" onclick="showCourseRecords('<?php echo htmlspecialchars($course['course_name']); ?>-jss2', '<?php echo htmlspecialchars($course['course_code']); ?>')">JSS 2</a>
-                                <a href="#" onclick="showCourseRecords('<?php echo htmlspecialchars($course['course_name']); ?>-jss3', '<?php echo htmlspecialchars($course['course_code']); ?>')">JSS 3</a>
+                                <?php if ($course['is_teacher']): ?>
+                                    <a href="#" onclick="showCourseRecords('<?php echo htmlspecialchars($course['course_name']); ?>-jss1', '<?php echo htmlspecialchars($course['course_code']); ?>')">JSS 1</a>
+                                    <a href="#" onclick="showCourseRecords('<?php echo htmlspecialchars($course['course_name']); ?>-jss2', '<?php echo htmlspecialchars($course['course_code']); ?>')">JSS 2</a>
+                                    <a href="#" onclick="showCourseRecords('<?php echo htmlspecialchars($course['course_name']); ?>-jss3', '<?php echo htmlspecialchars($course['course_code']); ?>')">JSS 3</a>
+                                <?php else: ?>
+                                    <a href="#" onclick="showCourseRecords('<?php echo htmlspecialchars($course['course_name']); ?>-<?php echo strtolower($teacher_class['class_name']); ?>', '<?php echo htmlspecialchars($course['course_code']); ?>')"><?php echo strtoupper($teacher_class['class_name']); ?></a>
+                                <?php endif; ?>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -257,7 +269,10 @@ $teacher = $stmt->get_result()->fetch_assoc();
 
                 <?php foreach ($courses as $course): ?>
                     <?php
-                    $classes = ['jss1', 'jss2', 'jss3'];
+                    // For courses they teach, show all classes
+                    // For other courses, only show their assigned class
+                    $classes = $course['is_teacher'] ? ['jss1', 'jss2', 'jss3'] : [strtolower($teacher_class['class_name'])];
+
                     foreach ($classes as $class):
                         // Get students and their grades for this class and course
                         $sql = "SELECT s.student_id, s.first_name, s.last_name,
@@ -277,8 +292,8 @@ $teacher = $stmt->get_result()->fetch_assoc();
                         $stmt->execute();
                         $students = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                     ?>
-                        <div id="<?php echo htmlspecialchars($course['course_name']) . '-' . $class; ?>" 
-                             class="tab-content card <?php echo $course['is_teacher'] ? '' : 'read-only'; ?>">
+                        <div id="<?php echo htmlspecialchars($course['course_name']) . '-' . $class; ?>"
+                            class="tab-content card <?php echo $course['is_teacher'] ? '' : 'read-only'; ?>">
                             <div class="card-body">
                                 <h2><?php echo htmlspecialchars($course['course_name']); ?> - <?php echo strtoupper($class); ?> Student Grades</h2>
                                 <?php if (!$course['is_teacher']): ?>
@@ -322,7 +337,8 @@ $teacher = $stmt->get_result()->fetch_assoc();
                                                                         '<?php echo $course['course_code']; ?>', 
                                                                         '<?php echo $studentFullName; ?>')"></i>
                                                         <i class="fas fa-trash-alt" title="Delete"
-                                                            data-id="<?php echo htmlspecialchars($student['student_id']); ?>"></i>
+                                                            data-id="<?php echo htmlspecialchars($student['student_id']); ?>"
+                                                            onclick="deleteGrade('<?php echo htmlspecialchars($student['student_id']); ?>', '<?php echo htmlspecialchars($course['course_code']); ?>')"></i>
                                                     </td>
                                                 <?php endif; ?>
                                             </tr>
