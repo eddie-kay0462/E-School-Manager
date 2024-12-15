@@ -303,7 +303,8 @@ $teacher = $stmt->get_result()->fetch_assoc();
                                                                     '<?php echo $course['course_code']; ?>', 
                                                                     '<?php echo $studentFullName; ?>')"></i>
                                                     <i class="fas fa-trash-alt" title="Delete"
-                                                        data-id="<?php echo htmlspecialchars($student['student_id']); ?>"></i>
+                                                        data-id="<?php echo htmlspecialchars($student['student_id']); ?>"
+                                                        onclick="deleteGrade('<?php echo htmlspecialchars($student['student_id']); ?>', '<?php echo htmlspecialchars($course['course_code']); ?>')"></i>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
