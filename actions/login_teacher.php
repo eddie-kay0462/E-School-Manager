@@ -1,10 +1,10 @@
 <?php
 include '../db/config2.php';
+session_start();
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-session_start();
 
 if (isset($_POST['teacher_id']) && isset($_POST['email']) && isset($_POST['password'])) {
     // Sanitize inputs
