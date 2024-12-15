@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <?php
-// Start session and include database connection
 session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require_once('../db/config2.php');
 
 // Get teacher ID from session
@@ -149,6 +151,8 @@ $teacher = $stmt->get_result()->fetch_assoc();
         <div class="modal-content">
             <h3>Edit Grades for <span id="studentNameInModal"></span></h3>
             <form id="editGradesForm">
+                <input type="hidden" id="classId" name="classId" value="some_class_id">
+                <input type="hidden" id="courseCode" name="courseCode">
                 <input type="text" id="studentId" name="studentId" readonly class="form-control">
                 <div class="mb-3">
                     <label for="assignmentScore" class="form-label">Assignment Score (25%)</label>
@@ -282,7 +286,7 @@ $teacher = $stmt->get_result()->fetch_assoc();
                                                 $student['mid_term_score'] + $student['exam_score'];
                                             $studentFullName = htmlspecialchars($student['first_name'] . ' ' . $student['last_name']);
                                         ?>
-                                            <tr>
+                                            <tr data-id="<?php echo htmlspecialchars($student['student_id']); ?>">
                                                 <td><?php echo $studentFullName; ?></td>
                                                 <td><?php echo $student['assignment_score']; ?></td>
                                                 <td><?php echo $student['test_score']; ?></td>
@@ -290,8 +294,16 @@ $teacher = $stmt->get_result()->fetch_assoc();
                                                 <td><?php echo $student['exam_score']; ?></td>
                                                 <td><?php echo number_format($total, 2); ?></td>
                                                 <td class="action-icons">
-                                                    <i class="fas fa-edit" title="Edit" onclick="openEditModal('<?php echo $student['student_id']; ?>', <?php echo $student['assignment_score']; ?>, <?php echo $student['test_score']; ?>, <?php echo $student['mid_term_score']; ?>, <?php echo $student['exam_score']; ?>, '<?php echo $studentFullName; ?>')"></i>
-                                                    <i class="fas fa-trash-alt" title="Delete"></i>
+                                                    <i class="fas fa-plus-circle" title="Add Grade"
+                                                        onclick="openAddModal('<?php echo $student['student_id']; ?>', 
+                                                                    '<?php echo $course['course_code']; ?>', 
+                                                                    '<?php echo $studentFullName; ?>')"></i>
+                                                    <i class="fas fa-edit" title="Edit"
+                                                        onclick="openEditModal('<?php echo $student['student_id']; ?>', 
+                                                                    '<?php echo $course['course_code']; ?>', 
+                                                                    '<?php echo $studentFullName; ?>')"></i>
+                                                    <i class="fas fa-trash-alt" title="Delete"
+                                                        data-id="<?php echo htmlspecialchars($student['student_id']); ?>"></i>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
