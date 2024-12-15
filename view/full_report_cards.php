@@ -1,16 +1,52 @@
 <?php
 session_start();
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 require_once('../db/config2.php');
 
-// Get student ID and class ID from URL parameters
+// Check if user is logged in and is either a teacher or parent
+if (!isset($_SESSION['user_type']) || !in_array($_SESSION['user_type'], ['teacher', 'parent'])) {
+    header('Location: ../index.php');
+    exit();
+}
+
 $student_id = $_GET['student_id'];
 $class_id = $_GET['class_id'];
 
+// Security checks based on user type
+if ($_SESSION['user_type'] === 'parent') {
+    // Verify parent is authorized to view this student's report
+    $sql = "SELECT ward_id FROM parents WHERE parent_id = ? AND ward_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $_SESSION['user_id'], $student_id);
+    $stmt->execute();
+    if ($stmt->get_result()->num_rows === 0) {
+        header('Location: parent-login.php?error=unauthorized');
+        exit();
+    }
+} else if ($_SESSION['user_type'] === 'teacher') {
+    // Verify teacher has access to this class
+    $sql = "SELECT class_id FROM classes WHERE class_teacher_id = ? AND class_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $_SESSION['user_id'], $class_id);
+    $stmt->execute();
+    if ($stmt->get_result()->num_rows === 0) {
+        // Check if teacher teaches any subjects in this class
+        $sql = "SELECT tc.course_code 
+                FROM teacher_courses tc
+                INNER JOIN grades g ON tc.course_code = g.course_code
+                WHERE tc.teacher_id = ? AND g.class_id = ?
+                LIMIT 1";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $_SESSION['user_id'], $class_id);
+        $stmt->execute();
+        if ($stmt->get_result()->num_rows === 0) {
+            header('Location: class-teacher-dashboard.php?error=unauthorized');
+            exit();
+        }
+    }
+}
+
 // Get student details
-$sql = "SELECT s.*, c.class_name, CONCAT(t.first_name, ' ', t.last_name) as teacher_name 
+$sql = "SELECT s.*, c.class_name 
         FROM students s
         INNER JOIN classes c ON s.class_id = c.class_id
         LEFT JOIN teachers t ON c.class_teacher_id = t.teacher_id
@@ -65,10 +101,53 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $class_id);
 $stmt->execute();
 $total_students = $stmt->get_result()->fetch_assoc();
+
+// Get teacher remarks for current year
+$sql = "SELECT r.remark, CONCAT(t.first_name, ' ', t.last_name) as teacher_name 
+        FROM remarks r
+        LEFT JOIN teachers t ON r.teacher_id = t.teacher_id 
+        WHERE r.student_id = ? AND r.academic_year = '2023/2024'";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $student_id);
+$stmt->execute();
+$remarks_result = $stmt->get_result();
+$remarks_data = $remarks_result->fetch_assoc();
+$remarks = $remarks_data['remark'] ?? '';
+$remark_teacher = $remarks_data['teacher_name'] ?? '';
+
+// Handle saving remarks if form submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['user_type'] === 'teacher') {
+    $new_remark = $_POST['remarks'];
+    $academic_year = '2023/2024';
+
+    // Check if remark exists
+    $check_sql = "SELECT remark_id FROM remarks WHERE student_id = ? AND academic_year = ?";
+    $check_stmt = $conn->prepare($check_sql);
+    $check_stmt->bind_param("ss", $student_id, $academic_year);
+    $check_stmt->execute();
+    $existing = $check_stmt->get_result()->fetch_assoc();
+
+    if ($existing) {
+        // Update existing remark
+        $update_sql = "UPDATE remarks SET remark = ?, teacher_id = ? WHERE student_id = ? AND academic_year = ?";
+        $update_stmt = $conn->prepare($update_sql);
+        $update_stmt->bind_param("ssss", $new_remark, $_SESSION['user_id'], $student_id, $academic_year);
+        $update_stmt->execute();
+    } else {
+        // Insert new remark
+        $insert_sql = "INSERT INTO remarks (student_id, teacher_id, academic_year, remark) VALUES (?, ?, ?, ?)";
+        $insert_stmt = $conn->prepare($insert_sql);
+        $insert_stmt->bind_param("ssss", $student_id, $_SESSION['user_id'], $academic_year, $new_remark);
+        $insert_stmt->execute();
+    }
+
+    $remarks = $new_remark;
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -102,7 +181,7 @@ $total_students = $stmt->get_result()->fetch_assoc();
             border: none;
             border-radius: 12px;
             background-color: #ffffff;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
 
         .school-header {
@@ -141,12 +220,16 @@ $total_students = $stmt->get_result()->fetch_assoc();
         }
 
         @media print {
-            .navbar, .print-button, footer {
+
+            .navbar,
+            .print-button,
+            footer {
                 display: none;
             }
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
@@ -156,9 +239,11 @@ $total_students = $stmt->get_result()->fetch_assoc();
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="class-teacher-dashboard.php">Dashboard</a>
-                    </li>
+                    <?php if ($_SESSION['user_type'] === 'teacher'): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="class-teacher-dashboard.php">Dashboard</a>
+                        </li>
+                    <?php endif; ?>
                     <li class="nav-item">
                         <a class="nav-link" href="../actions/logout.php">Logout</a>
                     </li>
@@ -182,7 +267,6 @@ $total_students = $stmt->get_result()->fetch_assoc();
                         <h5><i class="fas fa-chalkboard me-2"></i>Class: <?php echo htmlspecialchars($student['class_name']); ?></h5>
                     </div>
                     <div class="col-md-6 text-md-end">
-                        <h5><i class="fas fa-calendar me-2"></i>Term: 2nd Term</h5>
                         <h5><i class="fas fa-clock me-2"></i>Academic Year: 2023/2024</h5>
                     </div>
                 </div>
@@ -203,12 +287,12 @@ $total_students = $stmt->get_result()->fetch_assoc();
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($grades as $grade): 
+                        <?php foreach ($grades as $grade):
                             $total = ((0.25 * $grade['assignment_score']) +
-                                    (0.25 * $grade['test_score']) +
-                                    (0.25 * $grade['mid_term_score']) +
-                                    (0.25 * $grade['exam_score']));
-                            
+                                (0.25 * $grade['test_score']) +
+                                (0.25 * $grade['mid_term_score']) +
+                                (0.25 * $grade['exam_score']));
+
                             // Calculate letter grade
                             if ($total >= 70) $letter_grade = 'A';
                             else if ($total >= 60) $letter_grade = 'B';
@@ -217,15 +301,15 @@ $total_students = $stmt->get_result()->fetch_assoc();
                             else if ($total >= 40) $letter_grade = 'E';
                             else $letter_grade = 'F';
                         ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($grade['course_name']); ?></td>
-                            <td><?php echo $grade['assignment_score']; ?></td>
-                            <td><?php echo $grade['test_score']; ?></td>
-                            <td><?php echo $grade['mid_term_score']; ?></td>
-                            <td><?php echo $grade['exam_score']; ?></td>
-                            <td><?php echo number_format($total, 2); ?></td>
-                            <td><?php echo $letter_grade; ?></td>
-                        </tr>
+                            <tr>
+                                <td><?php echo htmlspecialchars($grade['course_name']); ?></td>
+                                <td><?php echo $grade['assignment_score']; ?></td>
+                                <td><?php echo $grade['test_score']; ?></td>
+                                <td><?php echo $grade['mid_term_score']; ?></td>
+                                <td><?php echo $grade['exam_score']; ?></td>
+                                <td><?php echo number_format($total, 2); ?></td>
+                                <td><?php echo $letter_grade; ?></td>
+                            </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
@@ -244,14 +328,42 @@ $total_students = $stmt->get_result()->fetch_assoc();
 
             <div class="remarks-section">
                 <h4><i class="fas fa-comment me-2"></i>Class Teacher's Remarks</h4>
-                <p>Class Teacher: <?php echo htmlspecialchars($student['teacher_name']); ?></p>
-                <textarea class="form-control" rows="3" placeholder="Enter remarks here..."></textarea>
+                <p>Class Teacher: <?php
+                                    $teacher_sql = "SELECT CONCAT(t.first_name, ' ', t.last_name) as teacher_name 
+                                  FROM teachers t 
+                                  INNER JOIN classes c ON t.teacher_id = c.class_teacher_id 
+                                  WHERE c.class_id = ?";
+                                    $teacher_stmt = $conn->prepare($teacher_sql);
+                                    $teacher_stmt->bind_param("s", $class_id);
+                                    $teacher_stmt->execute();
+                                    $teacher_result = $teacher_stmt->get_result();
+                                    $teacher_name = $teacher_result->fetch_assoc()['teacher_name'] ?? 'Not Assigned';
+                                    echo htmlspecialchars($teacher_name);
+                                    ?></p>
+                <?php if ($_SESSION['user_type'] === 'teacher'): ?>
+                    <form method="POST">
+                        <textarea name="remarks" class="form-control" rows="3" placeholder="Enter remarks here..."><?php echo htmlspecialchars($remarks); ?></textarea>
+                        <button type="submit" class="btn btn-primary mt-2">Save Remarks</button>
+                    </form>
+                <?php else: ?>
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="mb-2"><strong>Remark by:</strong> <?php echo htmlspecialchars($remark_teacher); ?></p>
+                            <p class="mb-0"><?php echo htmlspecialchars($remarks); ?></p>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
 
-            <div class="text-center">
-                <button class="btn btn-primary print-button" onclick="window.print()">
+            <div class="mt-4">
+                <button onclick="window.print()" class="btn btn-primary">
                     <i class="fas fa-print me-2"></i>Print Report Card
                 </button>
+                <?php if ($_SESSION['user_type'] === 'teacher'): ?>
+                    <a href="report-card.php?class_id=<?php echo $class_id; ?>" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Class Report
+                    </a>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -262,4 +374,5 @@ $total_students = $stmt->get_result()->fetch_assoc();
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
