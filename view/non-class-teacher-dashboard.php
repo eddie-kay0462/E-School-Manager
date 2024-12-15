@@ -25,10 +25,6 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $teacher_id);
 $stmt->execute();
 $teacher = $stmt->get_result()->fetch_assoc();
-
-// Get current academic year
-$currentYear = date('Y');
-$academicYear = $currentYear . '-' . ($currentYear + 1);
 ?>
 <html lang="en">
 
@@ -153,7 +149,7 @@ $academicYear = $currentYear . '-' . ($currentYear + 1);
         <div class="modal-content">
             <h3>Edit Grades for <span id="studentNameInModal"></span></h3>
             <form id="editGradesForm">
-                <input type="hidden" id="studentId" name="studentId">
+                <input type="text" id="studentId" name="studentId" readonly class="form-control">
                 <div class="mb-3">
                     <label for="assignmentScore" class="form-label">Assignment Score (25%)</label>
                     <input type="number" class="form-control" id="assignmentScore" name="assignmentScore" min="0" max="100" required>
@@ -246,14 +242,22 @@ $academicYear = $currentYear . '-' . ($currentYear + 1);
                     <?php
                     $classes = ['jss1', 'jss2', 'jss3'];
                     foreach ($classes as $class):
-                        // Get students for this class
-                        $sql = "SELECT s.student_id, s.first_name, s.last_name 
+                        // Get students and their grades for this class and course
+                        $sql = "SELECT s.student_id, s.first_name, s.last_name,
+                                COALESCE(g.assignment_score, 0) as assignment_score,
+                                COALESCE(g.test_score, 0) as test_score,
+                                COALESCE(g.mid_term_score, 0) as mid_term_score,
+                                COALESCE(g.exam_score, 0) as exam_score
                                 FROM students s
                                 INNER JOIN classes c ON s.class_id = c.class_id 
+                                LEFT JOIN grades g ON s.student_id = g.student_id 
+                                    AND g.course_code = ? 
+                                    AND g.teacher_id = ?
+                                    AND g.class_id = c.class_id
                                 WHERE c.class_name = ? AND s.status = 'active'
                                 ORDER BY s.last_name, s.first_name";
                         $stmt = $conn->prepare($sql);
-                        $stmt->bind_param("s", $class);
+                        $stmt->bind_param("sss", $course['course_code'], $teacher_id, $class);
                         $stmt->execute();
                         $students = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                     ?>
@@ -274,23 +278,19 @@ $academicYear = $currentYear . '-' . ($currentYear + 1);
                                     </thead>
                                     <tbody>
                                         <?php foreach ($students as $student):
-                                            // Generate random initial grades for demonstration
-                                            $assignment = rand(60, 95);
-                                            $test = rand(60, 95);
-                                            $midterm = rand(60, 95);
-                                            $exam = rand(60, 95);
-                                            $total = ($assignment + $test + $midterm + $exam) / 4;
+                                            $total = $student['assignment_score'] + $student['test_score'] +
+                                                $student['mid_term_score'] + $student['exam_score'];
                                             $studentFullName = htmlspecialchars($student['first_name'] . ' ' . $student['last_name']);
                                         ?>
                                             <tr>
                                                 <td><?php echo $studentFullName; ?></td>
-                                                <td><?php echo $assignment; ?></td>
-                                                <td><?php echo $test; ?></td>
-                                                <td><?php echo $midterm; ?></td>
-                                                <td><?php echo $exam; ?></td>
+                                                <td><?php echo $student['assignment_score']; ?></td>
+                                                <td><?php echo $student['test_score']; ?></td>
+                                                <td><?php echo $student['mid_term_score']; ?></td>
+                                                <td><?php echo $student['exam_score']; ?></td>
                                                 <td><?php echo number_format($total, 2); ?></td>
                                                 <td class="action-icons">
-                                                    <i class="fas fa-edit" title="Edit" onclick="openEditModal('<?php echo $student['student_id']; ?>', <?php echo $assignment; ?>, <?php echo $test; ?>, <?php echo $midterm; ?>, <?php echo $exam; ?>, '<?php echo $studentFullName; ?>')"></i>
+                                                    <i class="fas fa-edit" title="Edit" onclick="openEditModal('<?php echo $student['student_id']; ?>', <?php echo $student['assignment_score']; ?>, <?php echo $student['test_score']; ?>, <?php echo $student['mid_term_score']; ?>, <?php echo $student['exam_score']; ?>, '<?php echo $studentFullName; ?>')"></i>
                                                     <i class="fas fa-trash-alt" title="Delete"></i>
                                                 </td>
                                             </tr>
@@ -311,72 +311,8 @@ $academicYear = $currentYear . '-' . ($currentYear + 1);
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function toggleClassLinks(courseCode) {
-            const classLinks = document.getElementById(`classes-${courseCode}`);
-            if (classLinks.style.display === 'block') {
-                classLinks.style.display = 'none';
-            } else {
-                // Hide all other class links first
-                document.querySelectorAll('.class-links').forEach(el => {
-                    el.style.display = 'none';
-                });
-                classLinks.style.display = 'block';
-            }
-        }
-
-        function showCourseRecords(courseName, courseCode) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-
-            // Show selected course tab
-            document.getElementById(courseName).classList.add('active');
-
-            // Update course info card
-            const courseRecords = document.getElementById('courseRecords');
-            const courseTitle = document.getElementById('courseTitle');
-            const courseMessage = document.getElementById('courseMessage');
-
-            courseTitle.textContent = courseName;
-            courseMessage.textContent = `Viewing records for ${courseName}`;
-            courseRecords.classList.remove('d-none');
-        }
-
-        function openEditModal(studentId, assignment, test, midterm, exam, studentName) {
-            const modal = document.getElementById('editGradesModal');
-            document.getElementById('studentId').value = studentId;
-            document.getElementById('assignmentScore').value = assignment;
-            document.getElementById('testScore').value = test;
-            document.getElementById('midtermScore').value = midterm;
-            document.getElementById('examScore').value = exam;
-            document.getElementById('studentNameInModal').textContent = studentName;
-            modal.style.display = 'block';
-        }
-
-        function closeEditModal() {
-            const modal = document.getElementById('editGradesModal');
-            modal.style.display = 'none';
-        }
-
-        document.getElementById('editGradesForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            // Here you would typically send the form data to the server
-            // For now, we'll just close the modal
-            closeEditModal();
-        });
-
-        // Show first course tab by default
-        document.addEventListener('DOMContentLoaded', () => {
-            const firstCourse = document.querySelector('.course-item');
-            if (firstCourse) {
-                const courseName = firstCourse.querySelector('span').textContent;
-                const courseCode = firstCourse.parentElement.querySelector('.class-links').id.replace('classes-', '');
-                showCourseRecords(courseName + '-JSS1', courseCode);
-            }
-        });
-    </script>
+    <!-- include the link to the script files -->
+    <script src="../assets/js/non-class-teacher-dashboard.js"></script>
 </body>
 
 </html>
