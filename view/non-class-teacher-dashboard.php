@@ -1,4 +1,35 @@
 <!DOCTYPE html>
+<?php
+// Start session and include database connection
+session_start();
+require_once('../db/config2.php');
+
+// Get teacher ID from session
+$teacher_id = $_SESSION['user_id'];
+
+// Get teacher's courses
+$sql = "SELECT DISTINCT c.course_code, c.course_name 
+        FROM courses c
+        INNER JOIN teacher_courses tc ON c.course_code = tc.course_code
+        WHERE tc.teacher_id = ?";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $teacher_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$courses = $result->fetch_all(MYSQLI_ASSOC);
+
+// Get teacher details
+$sql = "SELECT first_name, last_name FROM teachers WHERE teacher_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $teacher_id);
+$stmt->execute();
+$teacher = $stmt->get_result()->fetch_assoc();
+
+// Get current academic year
+$currentYear = date('Y');
+$academicYear = $currentYear . '-' . ($currentYear + 1);
+?>
 <html lang="en">
 
 <head>
@@ -49,6 +80,23 @@
             margin-right: 10px;
         }
 
+        .class-links {
+            padding-left: 30px;
+            display: none;
+        }
+
+        .class-links a {
+            color: #fff;
+            text-decoration: none;
+            display: block;
+            padding: 5px 0;
+            font-size: 0.9em;
+        }
+
+        .class-links a:hover {
+            color: #ddd;
+        }
+
         .tab-content {
             display: none;
         }
@@ -60,6 +108,20 @@
         .grade-input {
             width: 60px;
             text-align: center;
+        }
+
+        .action-icons i {
+            cursor: pointer;
+            margin: 0 5px;
+            font-size: 1.1em;
+        }
+
+        .fa-edit {
+            color: #2196F3;
+        }
+
+        .fa-trash-alt {
+            color: #F44336;
         }
     </style>
 </head>
@@ -100,34 +162,27 @@
                     <h3>Courses</h3>
                 </div>
                 <div>
-                    <div class="course-item" onclick="showCourseRecords('Mathematics')">
-                        <i class="fas fa-square-root-alt"></i>
-                        <span>Mathematics</span>
-                    </div>
-                    <div class="course-item" onclick="showCourseRecords('English')">
-                        <i class="fas fa-book"></i>
-                        <span>English</span>
-                    </div>
-                    <div class="course-item" onclick="showCourseRecords('Integrated Science')">
-                        <i class="fas fa-flask"></i>
-                        <span>Integrated Science</span>
-                    </div>
-                    <div class="course-item" onclick="showCourseRecords('Social Studies')">
-                        <i class="fas fa-globe"></i>
-                        <span>Social Studies</span>
-                    </div>
-                    <div class="course-item" onclick="showCourseRecords('French')">
-                        <i class="fas fa-language"></i>
-                        <span>French</span>
-                    </div>
+                    <?php foreach ($courses as $course): ?>
+                        <div>
+                            <div class="course-item" onclick="toggleClassLinks('<?php echo htmlspecialchars($course['course_code']); ?>')">
+                                <i class="fas fa-book"></i>
+                                <span><?php echo htmlspecialchars($course['course_name']); ?></span>
+                            </div>
+                            <div class="class-links" id="classes-<?php echo htmlspecialchars($course['course_code']); ?>">
+                                <a href="#" onclick="showCourseRecords('<?php echo htmlspecialchars($course['course_name']); ?>-jss1', '<?php echo htmlspecialchars($course['course_code']); ?>')">JSS 1</a>
+                                <a href="#" onclick="showCourseRecords('<?php echo htmlspecialchars($course['course_name']); ?>-jss2', '<?php echo htmlspecialchars($course['course_code']); ?>')">JSS 2</a>
+                                <a href="#" onclick="showCourseRecords('<?php echo htmlspecialchars($course['course_name']); ?>-jss3', '<?php echo htmlspecialchars($course['course_code']); ?>')">JSS 3</a>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
 
             <div class="col-md-9 col-lg-10 p-4 bg-light">
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h1>Welcome, Mr. Smith</h1>
-                        <p class="mb-0">Subject Teacher - Mathematics</p>
+                        <h1>Welcome, <?php echo htmlspecialchars($teacher['first_name'] . ' ' . $teacher['last_name']); ?></h1>
+                        <p class="mb-0">Subject Teacher</p>
                     </div>
                 </div>
 
@@ -138,185 +193,64 @@
                     </div>
                 </div>
 
-                <div id="Mathematics" class="tab-content card">
-                    <div class="card-body">
-                        <h2>Mathematics - Student Grades</h2>
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Student Name</th>
-                                        <th>Assignment (20%)</th>
-                                        <th>Classwork (20%)</th>
-                                        <th>Midterm (20%)</th>
-                                        <th>Final (40%)</th>
-                                        <th>Overall (100%)</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>John Doe</td>
-                                        <td><input type="number" class="form-control grade-input" value="85" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="90" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="92" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="95" min="0" max="100"></td>
-                                        <td>90</td>
-                                        <td>
-                                            <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
-                                            <button class="btn btn-warning btn-sm" onclick="updateGrades(this)">Update</button>
-                                            <button class="btn btn-danger btn-sm" onclick="deleteGrades(this)">Delete</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                <?php foreach ($courses as $course): ?>
+                    <?php
+                    $classes = ['jss1', 'jss2', 'jss3'];
+                    foreach ($classes as $class):
+                        // Get students for this class
+                        $sql = "SELECT s.student_id, s.first_name, s.last_name 
+                                FROM students s
+                                INNER JOIN classes c ON s.class_id = c.class_id 
+                                WHERE c.class_name = ? AND s.status = 'active'
+                                ORDER BY s.last_name, s.first_name";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->bind_param("s", $class);
+                        $stmt->execute();
+                        $students = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+                    ?>
+                        <div id="<?php echo htmlspecialchars($course['course_name']) . '-' . $class; ?>" class="tab-content card">
+                            <div class="card-body">
+                                <h2><?php echo htmlspecialchars($course['course_name']); ?> - <?php echo strtoupper($class); ?> Student Grades</h2>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Student Name</th>
+                                            <th>Assignment Score (25%)</th>
+                                            <th>Test Score (25%)</th>
+                                            <th>Mid Term Score (25%)</th>
+                                            <th>Exam Score (25%)</th>
+                                            <th>Total Score (100%)</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($students as $student):
+                                            // Generate random initial grades for demonstration
+                                            $assignment = rand(60, 95);
+                                            $test = rand(60, 95);
+                                            $midterm = rand(60, 95);
+                                            $exam = rand(60, 95);
+                                            $total = ($assignment + $test + $midterm + $exam) / 4;
+                                        ?>
+                                            <tr>
+                                                <td><?php echo htmlspecialchars($student['first_name'] . ' ' . $student['last_name']); ?></td>
+                                                <td><?php echo $assignment; ?></td>
+                                                <td><?php echo $test; ?></td>
+                                                <td><?php echo $midterm; ?></td>
+                                                <td><?php echo $exam; ?></td>
+                                                <td><?php echo number_format($total, 2); ?></td>
+                                                <td class="action-icons">
+                                                    <i class="fas fa-edit" title="Edit"></i>
+                                                    <i class="fas fa-trash-alt" title="Delete"></i>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                </div>
-
-                <div id="English" class="tab-content card">
-                    <div class="card-body">
-                        <h2>English - Student Grades</h2>
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Student Name</th>
-                                        <th>Assignment (20%)</th>
-                                        <th>Classwork (20%)</th>
-                                        <th>Midterm (20%)</th>
-                                        <th>Final (40%)</th>
-                                        <th>Overall (100%)</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>John Doe</td>
-                                        <td><input type="number" class="form-control grade-input" value="85" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="90" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="92" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="95" min="0" max="100"></td>
-                                        <td>90</td>
-                                        <td>
-                                            <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
-                                            <button class="btn btn-warning btn-sm" onclick="updateGrades(this)">Update</button>
-                                            <button class="btn btn-danger btn-sm" onclick="deleteGrades(this)">Delete</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="Integrated Science" class="tab-content card">
-                    <div class="card-body">
-                        <h2>Integrated Science - Student Grades</h2>
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Student Name</th>
-                                        <th>Assignment (20%)</th>
-                                        <th>Classwork (20%)</th>
-                                        <th>Midterm (20%)</th>
-                                        <th>Final (40%)</th>
-                                        <th>Overall (100%)</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Michael Johnson</td>
-                                        <td><input type="number" class="form-control grade-input" value="88" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="85" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="87" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="89" min="0" max="100"></td>
-                                        <td>88</td>
-                                        <td>
-                                            <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
-                                            <button class="btn btn-warning btn-sm" onclick="updateGrades(this)">Update</button>
-                                            <button class="btn btn-danger btn-sm" onclick="deleteGrades(this)">Delete</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="Social Studies" class="tab-content card">
-                    <div class="card-body">
-                        <h2>Social Studies - Student Grades</h2>
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Student Name</th>
-                                        <th>Assignment (20%)</th>
-                                        <th>Classwork (20%)</th>
-                                        <th>Midterm (20%)</th>
-                                        <th>Final (40%)</th>
-                                        <th>Overall (100%)</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>John Doe</td>
-                                        <td><input type="number" class="form-control grade-input" value="85" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="90" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="92" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="95" min="0" max="100"></td>
-                                        <td>90</td>
-                                        <td>
-                                            <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
-                                            <button class="btn btn-warning btn-sm" onclick="updateGrades(this)">Update</button>
-                                            <button class="btn btn-danger btn-sm" onclick="deleteGrades(this)">Delete</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="French" class="tab-content card">
-                    <div class="card-body">
-                        <h2>French - Student Grades</h2>
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th>Student Name</th>
-                                        <th>Assignment (20%)</th>
-                                        <th>Classwork (20%)</th>
-                                        <th>Midterm (20%)</th>
-                                        <th>Final (40%)</th>
-                                        <th>Overall (100%)</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>John Doe</td>
-                                        <td><input type="number" class="form-control grade-input" value="85" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="90" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="92" min="0" max="100"></td>
-                                        <td><input type="number" class="form-control grade-input" value="95" min="0" max="100"></td>
-                                        <td>90</td>
-                                        <td>
-                                            <button class="btn btn-primary btn-sm" onclick="saveGrades(this)">Save</button>
-                                            <button class="btn btn-warning btn-sm" onclick="updateGrades(this)">Update</button>
-                                            <button class="btn btn-danger btn-sm" onclick="deleteGrades(this)">Delete</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
 
             </div>
         </div>
@@ -328,7 +262,20 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function showCourseRecords(courseName) {
+        function toggleClassLinks(courseCode) {
+            const classLinks = document.getElementById(`classes-${courseCode}`);
+            if (classLinks.style.display === 'block') {
+                classLinks.style.display = 'none';
+            } else {
+                // Hide all other class links first
+                document.querySelectorAll('.class-links').forEach(el => {
+                    el.style.display = 'none';
+                });
+                classLinks.style.display = 'block';
+            }
+        }
+
+        function showCourseRecords(courseName, courseCode) {
             // Hide all tab contents
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
@@ -343,73 +290,18 @@
             const courseMessage = document.getElementById('courseMessage');
 
             courseTitle.textContent = courseName;
-            courseMessage.textContent = `Viewing records for ${courseName} course`;
+            courseMessage.textContent = `Viewing records for ${courseName}`;
             courseRecords.classList.remove('d-none');
         }
 
-        function saveGrades(button) {
-            const row = button.closest('tr');
-            const inputs = row.querySelectorAll('input[type="number"]');
-            let sum = 0;
-            inputs.forEach(input => {
-                sum += parseInt(input.value) || 0;
-            });
-            const average = Math.round(sum / inputs.length);
-            row.querySelector('td:nth-last-child(2)').textContent = average;
-
-            // Show save confirmation
-            button.textContent = 'Saved!';
-            button.disabled = true;
-            setTimeout(() => {
-                button.textContent = 'Save';
-                button.disabled = false;
-            }, 2000);
-        }
-
-        function updateGrades(button) {
-            const row = button.closest('tr');
-            const inputs = row.querySelectorAll('input[type="number"]');
-            inputs.forEach(input => {
-                input.disabled = false;
-            });
-            button.textContent = 'Confirm';
-            button.onclick = function() {
-                saveGrades(button);
-                inputs.forEach(input => {
-                    input.disabled = true;
-                });
-                button.textContent = 'Update';
-                button.onclick = function() {
-                    updateGrades(button);
-                };
-            };
-        }
-
-        function deleteGrades(button) {
-            if (confirm('Are you sure you want to delete these grades?')) {
-                const row = button.closest('tr');
-                row.remove();
-            }
-        }
-
-        function finalizeGrades() {
-            if (confirm('Are you sure you want to finalize and submit all grades? This action cannot be undone.')) {
-                // Here you would typically send the data to your backend
-                alert('Grades have been finalized and submitted successfully!');
-
-                // Disable all inputs and save buttons
-                document.querySelectorAll('.grade-input').forEach(input => {
-                    input.disabled = true;
-                });
-                document.querySelectorAll('button[onclick="saveGrades(this)"]').forEach(button => {
-                    button.disabled = true;
-                });
-            }
-        }
-
-        // Show Mathematics tab by default
+        // Show first course tab by default
         document.addEventListener('DOMContentLoaded', () => {
-            showCourseRecords('Mathematics');
+            const firstCourse = document.querySelector('.course-item');
+            if (firstCourse) {
+                const courseName = firstCourse.querySelector('span').textContent;
+                const courseCode = firstCourse.parentElement.querySelector('.class-links').id.replace('classes-', '');
+                showCourseRecords(courseName + '-JSS1', courseCode);
+            }
         });
     </script>
 </body>
