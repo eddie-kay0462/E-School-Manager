@@ -9,6 +9,56 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/admin-dashboard.css">
     <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css"> -->
+    <style>
+        .stats-card {
+            transition: transform 0.3s ease-in-out;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stats-icon {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .stats-label {
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(45deg, #4b6cb7, #182848);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .welcome-message {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .date-time {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+    </style>
 </head>
 
 <body>
@@ -77,14 +127,9 @@
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <!-- Dashboard Section -->
                 <section id="dashboard-section">
-                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                        <h1 class="h2">Admin Dashboard</h1>
-                        <div class="btn-toolbar mb-2 mb-md-0">
-                            <div class="btn-group me-2">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-                            </div>
-                        </div>
+                    <div class="dashboard-header mt-4">
+                        <h1 class="welcome-message">Welcome to Admin Dashboard</h1>
+                        <p class="date-time" id="currentDateTime"></p>
                     </div>
 
                     <?php
@@ -118,80 +163,105 @@
                     <!-- Statistics Cards -->
                     <div class="row mb-4">
                         <div class="col-md-3 mb-4">
-                            <div class="card bg-primary text-white h-100">
+                            <div class="card stats-card bg-primary text-white h-100">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
-                                            <h6 class="text-uppercase">Total Students</h6>
+                                            <h6 class="stats-label">Total Students</h6>
                                             <?php
                                             $query = "SELECT COUNT(*) as count FROM students";
                                             $result = mysqli_query($conn, $query);
                                             $row = mysqli_fetch_assoc($result);
                                             ?>
-                                            <h2 class="mb-0"><?php echo $row['count']; ?></h2>
+                                            <h2 class="stats-number"><?php echo $row['count']; ?></h2>
                                         </div>
-                                        <i class="fas fa-user-graduate fa-2x opacity-75"></i>
+                                        <div class="stats-icon">
+                                            <i class="fas fa-user-graduate fa-2x"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-3 mb-4">
-                            <div class="card bg-success text-white h-100">
+                            <div class="card stats-card bg-success text-white h-100">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
-                                            <h6 class="text-uppercase">Total Teachers</h6>
+                                            <h6 class="stats-label">Total Teachers</h6>
                                             <?php
                                             $query = "SELECT COUNT(*) as count FROM teachers";
                                             $result = mysqli_query($conn, $query);
                                             $row = mysqli_fetch_assoc($result);
                                             ?>
-                                            <h2 class="mb-0"><?php echo $row['count']; ?></h2>
+                                            <h2 class="stats-number"><?php echo $row['count']; ?></h2>
                                         </div>
-                                        <i class="fas fa-chalkboard-teacher fa-2x opacity-75"></i>
+                                        <div class="stats-icon">
+                                            <i class="fas fa-chalkboard-teacher fa-2x"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-3 mb-4">
-                            <div class="card bg-warning text-white h-100">
+                            <div class="card stats-card bg-warning text-white h-100">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
-                                            <h6 class="text-uppercase">Total Classes</h6>
+                                            <h6 class="stats-label">Total Classes</h6>
                                             <?php
                                             $query = "SELECT COUNT(*) as count FROM classes";
                                             $result = mysqli_query($conn, $query);
                                             $row = mysqli_fetch_assoc($result);
                                             ?>
-                                            <h2 class="mb-0"><?php echo $row['count']; ?></h2>
+                                            <h2 class="stats-number"><?php echo $row['count']; ?></h2>
                                         </div>
-                                        <i class="fas fa-school fa-2x opacity-75"></i>
+                                        <div class="stats-icon">
+                                            <i class="fas fa-school fa-2x"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-3 mb-4">
-                            <div class="card bg-info text-white h-100">
+                            <div class="card stats-card bg-info text-white h-100">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
-                                            <h6 class="text-uppercase">Total Courses</h6>
-                                            <h2 class="mb-0">
-                                                <?php
-                                                $query = "SELECT COUNT(*) as count FROM courses";
-                                                $result = mysqli_query($conn, $query);
-                                                $row = mysqli_fetch_assoc($result);
-                                                echo $row['count'];
-                                                ?>
-                                            </h2>
+                                            <h6 class="stats-label">Total Courses</h6>
+                                            <?php
+                                            $query = "SELECT COUNT(*) as count FROM courses";
+                                            $result = mysqli_query($conn, $query);
+                                            $row = mysqli_fetch_assoc($result);
+                                            ?>
+                                            <h2 class="stats-number"><?php echo $row['count']; ?></h2>
                                         </div>
-                                        <i class="fas fa-book fa-2x opacity-75"></i>
+                                        <div class="stats-icon">
+                                            <i class="fas fa-book fa-2x"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <script>
+                        function updateDateTime() {
+                            const now = new Date();
+                            const options = {
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                second: '2-digit'
+                            };
+                            document.getElementById('currentDateTime').textContent = now.toLocaleDateString('en-US', options);
+                        }
+
+                        updateDateTime();
+                        setInterval(updateDateTime, 1000);
+                    </script>
                 </section>
 
                 <!-- Teachers Section -->
