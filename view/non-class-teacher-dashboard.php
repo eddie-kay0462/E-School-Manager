@@ -123,10 +123,59 @@ $academicYear = $currentYear . '-' . ($currentYear + 1);
         .fa-trash-alt {
             color: #F44336;
         }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+        }
     </style>
 </head>
 
 <body>
+    <!-- Edit Grades Modal -->
+    <div id="editGradesModal" class="modal">
+        <div class="modal-content">
+            <h3>Edit Grades for <span id="studentNameInModal"></span></h3>
+            <form id="editGradesForm">
+                <input type="hidden" id="studentId" name="studentId">
+                <div class="mb-3">
+                    <label for="assignmentScore" class="form-label">Assignment Score (25%)</label>
+                    <input type="number" class="form-control" id="assignmentScore" name="assignmentScore" min="0" max="100" required>
+                </div>
+                <div class="mb-3">
+                    <label for="testScore" class="form-label">Test Score (25%)</label>
+                    <input type="number" class="form-control" id="testScore" name="testScore" min="0" max="100" required>
+                </div>
+                <div class="mb-3">
+                    <label for="midtermScore" class="form-label">Mid Term Score (25%)</label>
+                    <input type="number" class="form-control" id="midtermScore" name="midtermScore" min="0" max="100" required>
+                </div>
+                <div class="mb-3">
+                    <label for="examScore" class="form-label">Exam Score (25%)</label>
+                    <input type="number" class="form-control" id="examScore" name="examScore" min="0" max="100" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
             <a class="navbar-brand" href="#">Josephus Memorial School</a>
@@ -231,16 +280,17 @@ $academicYear = $currentYear . '-' . ($currentYear + 1);
                                             $midterm = rand(60, 95);
                                             $exam = rand(60, 95);
                                             $total = ($assignment + $test + $midterm + $exam) / 4;
+                                            $studentFullName = htmlspecialchars($student['first_name'] . ' ' . $student['last_name']);
                                         ?>
                                             <tr>
-                                                <td><?php echo htmlspecialchars($student['first_name'] . ' ' . $student['last_name']); ?></td>
+                                                <td><?php echo $studentFullName; ?></td>
                                                 <td><?php echo $assignment; ?></td>
                                                 <td><?php echo $test; ?></td>
                                                 <td><?php echo $midterm; ?></td>
                                                 <td><?php echo $exam; ?></td>
                                                 <td><?php echo number_format($total, 2); ?></td>
                                                 <td class="action-icons">
-                                                    <i class="fas fa-edit" title="Edit"></i>
+                                                    <i class="fas fa-edit" title="Edit" onclick="openEditModal('<?php echo $student['student_id']; ?>', <?php echo $assignment; ?>, <?php echo $test; ?>, <?php echo $midterm; ?>, <?php echo $exam; ?>, '<?php echo $studentFullName; ?>')"></i>
                                                     <i class="fas fa-trash-alt" title="Delete"></i>
                                                 </td>
                                             </tr>
@@ -293,6 +343,29 @@ $academicYear = $currentYear . '-' . ($currentYear + 1);
             courseMessage.textContent = `Viewing records for ${courseName}`;
             courseRecords.classList.remove('d-none');
         }
+
+        function openEditModal(studentId, assignment, test, midterm, exam, studentName) {
+            const modal = document.getElementById('editGradesModal');
+            document.getElementById('studentId').value = studentId;
+            document.getElementById('assignmentScore').value = assignment;
+            document.getElementById('testScore').value = test;
+            document.getElementById('midtermScore').value = midterm;
+            document.getElementById('examScore').value = exam;
+            document.getElementById('studentNameInModal').textContent = studentName;
+            modal.style.display = 'block';
+        }
+
+        function closeEditModal() {
+            const modal = document.getElementById('editGradesModal');
+            modal.style.display = 'none';
+        }
+
+        document.getElementById('editGradesForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Here you would typically send the form data to the server
+            // For now, we'll just close the modal
+            closeEditModal();
+        });
 
         // Show first course tab by default
         document.addEventListener('DOMContentLoaded', () => {
