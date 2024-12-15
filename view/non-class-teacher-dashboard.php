@@ -282,8 +282,8 @@ $teacher = $stmt->get_result()->fetch_assoc();
                                     </thead>
                                     <tbody>
                                         <?php foreach ($students as $student):
-                                            $total = $student['assignment_score'] + $student['test_score'] +
-                                                $student['mid_term_score'] + $student['exam_score'];
+                                            $total =  ((0.25 * $student['assignment_score']) + (0.25 * $student['test_score']) +
+                                                (0.25 * $student['mid_term_score']) + (0.25 * $student['exam_score']));
                                             $studentFullName = htmlspecialchars($student['first_name'] . ' ' . $student['last_name']);
                                         ?>
                                             <tr data-id="<?php echo htmlspecialchars($student['student_id']); ?>">
