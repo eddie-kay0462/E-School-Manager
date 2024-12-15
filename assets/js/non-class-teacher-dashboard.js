@@ -210,3 +210,22 @@ document.addEventListener('DOMContentLoaded', () => {
         showCourseRecords(courseName + '-JSS1', courseCode);
     }
 });
+
+//implement the delete function
+function deleteGrade(studentId, courseCode) {
+    // Show confirmation dialog before deleting
+    if (confirm('Are you sure you want to delete this grade? This action cannot be undone.')) {
+        //delete the grade from the database
+        fetch(`../actions/delete_grades.php?student_id=${studentId}&course_code=${courseCode}`)
+            .then(response => response.json())
+            .then(data => {
+                alert('Grade deleted successfully!');
+                // Reload the page to show updated data
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error deleting grade:', error);
+                alert('Error deleting grade. Please try again.');
+            });
+    }
+}
