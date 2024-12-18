@@ -64,7 +64,7 @@
 <body>
     <?php
     session_start();
-    require_once('../db/config2.php');
+    require_once('../db/config.php');
     ?>
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
@@ -350,6 +350,52 @@
                     </div>
                 </section>
 
+                <!-- Courses Section -->
+                <section id="courses-section" style="display: none;">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Manage Courses</h1>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCourseModal">
+                            <i class="fas fa-plus"></i> Add New Course
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="coursesTable">
+                            <thead>
+                                <tr>
+                                    <th>Course Code</th>
+                                    <th>Course Name</th>
+                                    <th>Teacher Name</th>
+                                    <th>Teacher ID</th>
+                                    <!-- <th>Actions</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $query = "SELECT c.course_code, c.course_name, 
+                                                t.teacher_id, t.first_name, t.last_name
+                                         FROM courses c
+                                         LEFT JOIN teacher_courses tc ON c.course_code = tc.course_code
+                                         LEFT JOIN teachers t ON tc.teacher_id = t.teacher_id";
+                                $result = mysqli_query($conn, $query);
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    echo "<tr>";
+                                    echo "<td>" . htmlspecialchars($row['course_code']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['course_name']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['teacher_id']) . "</td>";
+                                    // echo "<td>
+                                    //         <button class='btn btn-sm btn-primary' onclick='editCourse(\"" . $row['course_code'] . "\")'><i class='fas fa-edit'></i></button>
+                                    //         <button class='btn btn-sm btn-danger' onclick='deleteCourse(\"" . $row['course_code'] . "\")'><i class='fas fa-trash'></i></button>
+                                    //       </td>";
+                                    // echo "</tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
                 <!-- Students Section -->
                 <section id="student-registration-section" style="display: none;">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -383,8 +429,8 @@
                                     echo "<td>" . htmlspecialchars($row['class_name']) . "</td>";
                                     echo "<td>" . htmlspecialchars($row['enrollment_date']) . "</td>";
                                     echo "<td>
-                                            <button class='btn btn-sm btn-primary'><i class='fas fa-edit'></i></button>
-                                            <button class='btn btn-sm btn-danger'><i class='fas fa-trash'></i></button>
+                                            <button class='btn btn-sm btn-primary' onclick='openEditStudentModal(\"" . $row['student_id'] . "\")' data-bs-toggle='modal' data-bs-target='#editStudentModal'><i class='fas fa-edit'></i></button>
+                                            <button class='btn btn-sm btn-danger' onclick='deleteStudent(\"" . $row['student_id'] . "\")'><i class='fas fa-trash'></i></button>
                                           </td>";
                                     echo "</tr>";
                                 }
@@ -520,6 +566,73 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Edit Student Modal -->
+                <div class="modal fade" id="editStudentModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit Student</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="editStudentForm" action="../actions/update_student.php" method="post">
+                                    <input type="hidden" id="edit_student_id" name="student_id">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="edit_student_id" class="form-label">Student ID</label>
+                                            <input type="text" class="form-control" id="edit_student_id" name="student_id" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="edit_first_name" class="form-label">First Name</label>
+                                            <input type="text" class="form-control" id="edit_first_name" name="first_name" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="edit_last_name" class="form-label">Last Name</label>
+                                            <input type="text" class="form-control" id="edit_last_name" name="last_name" required>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="edit_dob" class="form-label">Date of Birth</label>
+                                            <input type="date" class="form-control" id="edit_dob" name="dob" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="edit_gender" class="form-label">Gender</label>
+                                            <select class="form-select" id="edit_gender" name="gender" required>
+                                                <option value="male">male</option>
+                                                <option value="female">female</option>
+                                                <option value="other">other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="edit_enrollment_date" class="form-label">Enrollment Date</label>
+                                            <input type="date" class="form-control" id="edit_enrollment_date" name="enrollment_date" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Class</label>
+                                            <div class="mt-2">
+                                                <?php
+                                                $query = "SELECT * FROM classes";
+                                                $result = mysqli_query($conn, $query);
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    echo "<div class='form-check'>";
+                                                    echo "<input class='form-check-input edit-class-radio' type='radio' name='class' id='edit_class" . $row['class_id'] . "' value='" . $row['class_id'] . "' required>";
+                                                    echo "<label class='form-check-label' for='edit_class" . $row['class_id'] . "'>" . htmlspecialchars($row['class_name']) . "</label>";
+                                                    echo "</div>";
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Update Student</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </main>
         </div>
     </div>
@@ -533,6 +646,7 @@
             document.getElementById('teachers-section').style.display = 'none';
             document.getElementById('student-registration-section').style.display = 'none';
             document.getElementById('classes-section').style.display = 'none';
+            document.getElementById('courses-section').style.display = 'none';
 
             // Show selected section
             if (sectionName === 'teachers') {
@@ -543,6 +657,8 @@
                 document.getElementById('student-registration-section').style.display = 'block';
             } else if (sectionName === 'classes') {
                 document.getElementById('classes-section').style.display = 'block';
+            } else if (sectionName === 'courses') {
+                document.getElementById('courses-section').style.display = 'block';
             }
         }
 
@@ -550,6 +666,7 @@
         $(document).ready(function() {
             $('#teachersTable').DataTable();
             $('#classesTable').DataTable();
+            $('#coursesTable').DataTable();
         });
 
         function editTeacher(teacherId) {
