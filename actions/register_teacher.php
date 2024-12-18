@@ -1,10 +1,8 @@
 <?php
-include '../db/config2.php';
+include '../db/config.php';
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-
-
 
 if (
     isset($_POST['firstName']) && isset($_POST['lastName']) && isset($_POST['email']) && isset($_POST['password'])
@@ -68,8 +66,6 @@ if (
             }
         }
 
-
-
         // If all checks pass, proceed with registration
         // Insert into users table first
         $stmt = $conn->prepare("INSERT INTO users (user_id, email, password, user_type, created_at) VALUES (?, ?, ?, 'teacher', NOW())");
@@ -110,11 +106,8 @@ if (
         $conn->commit();
         $_SESSION['success'] = "Teacher registered successfully!";
 
-        if ($isClassTeacher) {
-            header("Location: ../view/class-teacher-dashboard.php");
-        } else {
-            header("Location: ../view/non-class-teacher-dashboard.php");
-        }
+        // Redirect to login page after registration
+        header("Location: ../view/teacher-login.php");
     } catch (Exception $e) {
         // Rollback transaction on error
         $conn->rollback();

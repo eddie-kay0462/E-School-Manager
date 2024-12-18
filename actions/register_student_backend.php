@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../db/config2.php';
+include '../db/config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form data

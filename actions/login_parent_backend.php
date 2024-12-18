@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../db/config2.php');
+require_once('../db/config.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $wardId = $_POST['wardId'];

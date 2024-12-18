@@ -1,12 +1,12 @@
 <?php
-require_once('../db/config2.php');
+require_once('../db/config.php');
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 if (isset($_GET['student_id']) && isset($_GET['course_code'])) {
     $student_id = $_GET['student_id'];
     $course_code = $_GET['course_code'];
-    
+
 
     $sql = "SELECT assignment_score, test_score, mid_term_score, exam_score 
             FROM grades 

@@ -1,5 +1,5 @@
 <?php
-include '../db/config2.php';
+include '../db/config.php';
 session_start();
 
 error_reporting(E_ALL);

@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-include_once '../db/config2.php';
+include_once '../db/config.php';
 
 // Ensure only JSON is output
 header('Content-Type: application/json');
