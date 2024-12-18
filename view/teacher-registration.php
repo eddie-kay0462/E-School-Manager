@@ -157,6 +157,18 @@
                                             <label class="form-check-label" for="gaCheck">GA</label>
                                         </div>
                                     </div>
+                                    <div class="col-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="courses[]" value="rme" id="rmeCheck">
+                                            <label class="form-check-label" for="rmeCheck">RME</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="courses[]" value="econs" id="homeecCheck">
+                                            <label class="form-check-label" for="homeecCheck">Home Economics</label>
+                                        </div>
+                                    </div>
                                 </div>
                                 <span class="text-danger" id="coursesError" style="display: none;">Please select at least one course</span>
                             </div>
