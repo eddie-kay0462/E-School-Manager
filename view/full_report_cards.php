@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../db/config2.php');
+require_once('../db/config.php');
 
 // Check if user is logged in and is either a teacher or parent
 if (!isset($_SESSION['user_type']) || !in_array($_SESSION['user_type'], ['teacher', 'parent'])) {
