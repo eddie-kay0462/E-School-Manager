@@ -3,7 +3,7 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require_once('../db/config2.php');
+require_once('../db/config.php');
 
 // Get class ID from URL parameter
 $class_id = $_GET['class_id'];
