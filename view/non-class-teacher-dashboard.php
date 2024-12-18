@@ -4,7 +4,7 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require_once('../db/config2.php');
+require_once('../db/config.php');
 
 // Get teacher ID from session
 $teacher_id = $_SESSION['user_id'];
@@ -252,9 +252,9 @@ $teacher = $stmt->get_result()->fetch_assoc();
                                 COALESCE(g.test_score, 0) as test_score,
                                 COALESCE(g.mid_term_score, 0) as mid_term_score,
                                 COALESCE(g.exam_score, 0) as exam_score
-                                FROM students s
+                                FROM students s 
                                 INNER JOIN classes c ON s.class_id = c.class_id 
-                                LEFT JOIN grades g ON s.student_id = g.student_id 
+                                LEFT JOIN grades g ON s.student_id = g.student_id  
                                     AND g.course_code = ? 
                                     AND g.teacher_id = ?
                                     AND g.class_id = c.class_id
